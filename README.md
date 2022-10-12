@@ -7,6 +7,6 @@
 > 5. Danendra Herdiansyah
 
 ## *NAMA APLIKASI* : Click [here]() to visit the app!
-- Cerita aplikasi yang diajukan serta manfaatnya
-- Role atau peran pengguna beserta deskripsinya 
+- **Cerita aplikasi yang diajukan serta manfaatnya**
+- **Role atau peran pengguna beserta deskripsinya**
 
