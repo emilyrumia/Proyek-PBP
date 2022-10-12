@@ -23,6 +23,24 @@
     - Melihat daftar destinasi
     - Menambahkan review terhadap destinasi
     - Melihat review dari pengguna lainnya
+    
+ ## 💻 *NAMA APLIKASI* : Click [here]() to visit the app!
+- **Cerita aplikasi yang diajukan serta manfaatnya**
+ 
+  
+- **Daftar modul yang akan diimplementasikan**
+  1. Home dengan berita mengenai donor darah
+  2. Form Daftar Pendonor
+  3. List Pendonor
+  4. Pembuatan sertifikat Pendonor
+  5. Request dan Jadwal
+  
+- **Role atau peran pengguna beserta deskripsinya**
+  Pengguna
+  - Melihat daftar pendonor
+  - Daftar menjadi pendonor
+  - Melihat request dan jadwal
+
 
   
 
