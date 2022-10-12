@@ -8,5 +8,6 @@
 
 ## *NAMA APLIKASI* : Click [here]() to visit the app!
 - **Cerita aplikasi yang diajukan serta manfaatnya**
+- **Daftar modul yang akan diimplementasikan**
 - **Role atau peran pengguna beserta deskripsinya**
 
