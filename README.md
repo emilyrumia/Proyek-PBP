@@ -6,7 +6,7 @@
 > 4. Emily Rumia Naomi
 > 5. Danendra Herdiansyah
 
-## 💻 *NAMA APLIKASI* : Click [here]() to visit the app!
+## 💻 *travelind* : Click [here]() to visit the app!
 - **Cerita aplikasi yang diajukan serta manfaatnya**
   Aplikasi ini akan bertema pariwisata. G20 bekerja sama dengan berbagai negara. Dengan aplikasi ini, kita dapat memperkenalkan dan mempromosikan destinasi-destinasi parawisata yang ada di Indonesia. Namun, bukan hanya untuk negara-negara lain tetapi juga untuk orang indonesia dikarenakan kami melihat masih banyak sekali orang Indonesia yang belum mengetahui berbagai pariwisata di Indonesia. 
   
