@@ -22,8 +22,8 @@
 barang lelang, bisa comment pada barang lelang, bisa melihat barang lelang saya, bisa ask customer service
   2. Kandidat penerima hasil lelang: bisa lihat barang lelang yang hasilnya ditujukan ke saya, bisa edit profil kebutuhan
   3. Role umum: Bisa melihat daftar barang lelang dan melihat detail tiap barang lelang, bisa melihat daftar kandidat penerima hasil lelang <br>
-  Keterangan: <br>
-  Role umum termasuk dalam salah satu user berikut: <br>
+    Keterangan: <br>
+    Role umum termasuk dalam salah satu user berikut: <br>
     - User belum login
     - User sudah login apapun rolenya , baik user  biasa atau kandidat penerima hasil lelang
  
