@@ -1,0 +1,1 @@
+web: gunicorn lelang_donasi.wsgi --log-file -
