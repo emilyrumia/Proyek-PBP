@@ -1,0 +1,7 @@
+body{
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.bg-primary {
+    background-color: cadetblue !important;
+}

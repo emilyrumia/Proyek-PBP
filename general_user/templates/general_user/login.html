@@ -1,0 +1,10 @@
+{% extends 'base_auth.html' %}
+
+{% block meta %}
+<title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+<h1 class="text-center">Login Form</h1>
+<a href="{% url 'general_user:register' %}">Register Here</a>
+{% endblock content %}
