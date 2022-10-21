@@ -1,50 +1,54 @@
-from operator import imod
+from operator import mod
+from general_user.models import CustomUser, GeneralUser, RekeningBank
+from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from general_user.models import *
-from django.contrib.auth.forms import UserCreationForm  
 
-class GeneralUserRegisterForm(forms.ModelForm):
+class RegisterForm(forms.ModelForm):
     error_messages = {
-        'password_mismatch': ("The two password fields didn't match."),
-        'no_rekening_mismatch': ("Nomor rekening tidak valid."),
-        'nik_mismatch': ("NIK tidak valid.")
+        'no_ponsel_mismatch': ("Nomor ponsel tidak valid."),
     }
-    first_name = forms.CharField(required=True)
-    email = forms.EmailField(max_length=200)
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label='Confirm Password', 
-        widget=forms.PasswordInput,
-        help_text=("Enter the same password as above, for verification."))
+    no_ponsel = forms.CharField(max_length=16, required=True)
+    first_name = forms.CharField(max_length=100, required=True)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
     # specify the name of model to use
     class Meta:
-        model = GeneralUser
-        fields = ["first_name", "last_name", "email", "nik", "no_rekening", "username"]
-        
-    def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
+        model = CustomUser
+        fields = ["first_name", "last_name", "email", "username", "password", "no_ponsel"]
+
+    def clean_no_ponsel(self):
+        no_ponsel = self.cleaned_data.get("no_ponsel")
+        if len(no_ponsel) > 16 or not no_ponsel.isnumeric():
             raise forms.ValidationError(
-                self.error_messages['password_mismatch'],
-                code='password_mismatch',
+                self.error_messages['no_ponsel_mismatch'],
+                code='no_ponsel_mismatch',
             )
-        return password2
+        return no_ponsel
+
+    def save(self, commit=True):
+        user = super(RegisterForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+class RekeningBankForm(forms.ModelForm):
+    error_messages = {
+        'rekening_mismatch': ("Nomor rekening tidak valid."),
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nama_bank'].widget.attrs.update({'class': 'select form-select'})
+        
+    class Meta:
+        model = RekeningBank
+        fields = ['nama_bank', 'no_rekening', 'nama_pemilik']
 
     def clean_no_rekening(self):
         no_rekening = self.cleaned_data.get("no_rekening")
         if len(no_rekening) > 16 or not no_rekening.isnumeric():
             raise forms.ValidationError(
-                self.error_messages['no_rekening_mismatch'],
-                code='no_rekening_mismatch',
+                self.error_messages['rekening_mismatch'],
+                code='rekening_mismatch',
             )
         return no_rekening
-
-    def clean_nik(self):
-        nik = self.cleaned_data.get("nik")
-        if len(nik) != 16 or not nik.isnumeric():
-            raise forms.ValidationError(
-                self.error_messages['nik_mismatch'],
-                code='nik_mismatch',
-            )
-        return nik

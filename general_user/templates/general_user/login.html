@@ -1,10 +1,29 @@
-{% extends 'base_auth.html' %}
+{% extends 'base_nav_user.html' %}
 
 {% block meta %}
 <title>Login</title>
 {% endblock meta %}
 
 {% block content %}
-<h1 class="text-center">Login Form</h1>
-<a href="{% url 'general_user:register' %}">Register Here</a>
+{% load crispy_forms_tags %}
+<div class="container mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h1 class="text-center">Login User</h1>
+        <form method="POST" style="width:60%">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {% if messages %}  
+                <ul>   
+                    {% for message in messages %}  
+                        <li>{{ message }}</li>  
+                    {% endfor %}  
+                </ul>   
+            {% endif %}
+            <div class="container text-center mt-3">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+        <a href="{% url 'general_user:register' %}" class="mt-3">Register Here</a>
+    </div>
+</div>
 {% endblock content %}
