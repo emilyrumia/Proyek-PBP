@@ -1,7 +1,9 @@
-from operator import mod
-from general_user.models import CustomUser, GeneralUser, RekeningBank
+
+import email
+from general_user.models import GeneralUser, RekeningBank
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+from django.contrib.auth.models import User
 
 class RegisterForm(forms.ModelForm):
     error_messages = {
@@ -9,10 +11,11 @@ class RegisterForm(forms.ModelForm):
     }
     no_ponsel = forms.CharField(max_length=16, required=True)
     first_name = forms.CharField(max_length=100, required=True)
+    email = forms.EmailField(max_length=100, required=True)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     # specify the name of model to use
     class Meta:
-        model = CustomUser
+        model = User
         fields = ["first_name", "last_name", "email", "username", "password", "no_ponsel"]
 
     def clean_no_ponsel(self):

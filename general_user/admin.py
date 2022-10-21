@@ -6,5 +6,4 @@ from django.contrib.auth.forms import AuthenticationForm
 # Register your models here.
 
 admin.site.register(RekeningBank)
-admin.site.register(CustomUser)
 admin.site.register(GeneralUser)

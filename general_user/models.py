@@ -1,14 +1,10 @@
 
+from operator import imod
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 
-
-class CustomUser(AbstractUser):
-    email = models.EmailField(max_length=64, unique=True)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name']
 class RekeningBank(models.Model):
     MANDIRI = "MANDIRI"
     BNI = "BNI"
@@ -30,7 +26,7 @@ class RekeningBank(models.Model):
 
 
 class GeneralUser(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_resipien = models.BooleanField(default=False)
     akun_bank = models.OneToOneField(RekeningBank, on_delete=models.RESTRICT)
     no_ponsel = models.CharField(max_length=16, unique=True)
