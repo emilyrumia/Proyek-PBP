@@ -28,6 +28,7 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name']
 
+
 class GeneralUser(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     is_resipien = models.BooleanField(default=False)
