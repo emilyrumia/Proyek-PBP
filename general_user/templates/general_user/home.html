@@ -5,5 +5,15 @@
 {% endblock meta %}
 
 {% block content %}
-<h1 class="text-center">Hello world</h1>
+<div class="container-fluid">
+    <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+        {% if request.user.is_authenticated %}
+        <h1 class="text-center">Hello {{ request.user.first_name }}</h1>
+        {% else %}
+        <h1 class="text-center">Hello world</h1>
+        <button type="button" class="btn btn-primary"><a href="{% url 'general_user:register' %}" style="text-decoration: none; color: white;">Sign-Up Now</a></button>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock content %}
