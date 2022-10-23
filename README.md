@@ -6,7 +6,7 @@
 > 4. Emily Rumia Naomi
 > 5. Danendra Herdiansyah
 
-## 💻 *bidCare* : Click [here]() to visit the app!
+## 💻 *bidCare* : Click [here](https://bidcare.herokuapp.com/) to visit the app!
 - **Cerita aplikasi yang diajukan serta manfaatnya** <br>
   Karena pandemi global terus mempengaruhi semua sektor kehidupan termasuk sektor finansial, Aplikasi ini mendukung isu G20 untuk membantu menciptakan landasan pertumbuhan yang inklusif dan berkelanjutan. Aplikasi ini bertujuan untuk membantu masyarakat yang membutuhkan (donasi) melalui lelang barang. Dengan begitu, benefitnya bisa didapat oleh 2 pihak, yaitu pihak penerima bantuan dan pihak pemenang lelang. Pemenang lelang akan mendapatkan barang yang dibutuhkan dan memilih pihak yang akan akan menerima donasi. Pihak yang ingin mendapat bantuan bisa berupa institusi ataupun individu dengan target yang ingin dicapai dan benefit yang didapat adalah  70% hasil dari penjualan barang. Jika target donasi sudah tercapai, pihak penerima donasi sudah tidak dapat menerima donasi lagi asalkan mendaftarkan target baru. 
   
