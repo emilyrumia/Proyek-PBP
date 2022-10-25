@@ -4,5 +4,6 @@ from testimoni import views
 app_name = "testimoni"
 
 urlpatterns = [
-    path('', views.index, name="tampilan_testimoni"),
+    path('', views.show_testimoni, name="tampilan_testimoni"),
+    path('add-testimoni/', views.add_testimoni, name='add_testimoni')
 ]
