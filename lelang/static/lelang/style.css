@@ -1,0 +1,8 @@
+.card.h-100.shadow-sm{
+    transition: 0.1s;
+}
+
+.card.h-100.shadow-sm:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}

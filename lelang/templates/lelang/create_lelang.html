@@ -1,0 +1,22 @@
+{% extends 'base_nav_user.html' %}
+
+{% block meta %}
+<title>Buat Lelang Baru</title>
+{% endblock meta %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h1 class="text-center">Buat Lelang Baru</h1>
+        <form method="POST" enctype="multipart/form-data" style="width:60%">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="container text-center mt-3">
+                <button type="submit" class="btn btn-primary">Buat Lelang</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

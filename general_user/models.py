@@ -31,3 +31,6 @@ class GeneralUser(models.Model):
     akun_bank = models.OneToOneField(RekeningBank, on_delete=models.RESTRICT)
     no_ponsel = models.CharField(max_length=16, unique=True)
 
+    def __str__(self) -> str:
+        return self.user.username
+

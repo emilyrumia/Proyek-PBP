@@ -1,0 +1,18 @@
+{% extends 'base_rincian.html' %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="container mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h1>{{ item.nama_barang }}</h1>
+        <h1 class="text-center">Bidding</h1>
+        <form method="POST" style="width:60%">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="container text-center mt-3">
+                <button type="submit" class="btn btn-primary">Bid</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
