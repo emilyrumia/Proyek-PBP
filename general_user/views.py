@@ -8,6 +8,7 @@ from django.contrib import messages
 from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
 # Create your views here.
+
 def homepage(request):
     return render(request, "general_user/home.html")
 
