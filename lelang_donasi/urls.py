@@ -24,6 +24,7 @@ urlpatterns = [
     path("resipien/", include("resipien.urls")),
     path("lelang/", include("lelang.urls")),
     path("customer_service/", include("customer_service.urls")),
+    path("testimoni/", include("testimoni.urls"))
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)  
