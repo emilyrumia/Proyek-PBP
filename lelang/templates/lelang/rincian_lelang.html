@@ -27,20 +27,13 @@
                         <span class="float-end text-muted">Oleh {{ bid_tertinggi.user.user.username }}</span>
                         {% endif %}
                     </div>
-                    
                 </div>
                 <div class="d-flex justify-content-between lelang">
                     <span>Lelang Berakhir Dalam:</span>
                     {% load humanize %}
                     <span>{{ item.tanggal_berakhir|timeuntil }} | <span class="text-muted">{{ item.tanggal_berakhir }}</span></span>
-                </div>
-                <form method="POST" action="{% url 'lelang:bid_barang_lelang' item.pk %}" style="padding: 30px 0;">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <div class="container text-center mt-3">
-                        <button type="submit" class="btn btn-primary w-100">Bid</button>
-                    </div>
-                </form>
+                </div>    
+                
                 <div class="d-flex justify-content-between lelang">
                     <span>Kategori:</span>
                     <strong>{{ item.get_kategori_barang_display }}</strong>
@@ -49,6 +42,40 @@
                     <span>Lelang Dibuat Oleh:</span>
                     <span>{{ item.pelelang.user.username }}</span>
                 </div>
+                {% if request.user.is_authenticated %}
+                    {% if request.user != item.pelelang.user %}
+                    <form method="POST" action="{% url 'lelang:bid_barang_lelang' item.pk %}" style="padding: 30px 0;">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <div class="container text-center mt-3">
+                            <button type="submit" class="btn btn-primary w-100">Bid</button>
+                        </div>
+                    </form>
+                    {% endif %}
+                {% else %}
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Bid
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Informasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        Login terlebih dahulu agar bisa bidding
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary"><a href="{% url 'general_user:login' %}" style="text-decoration: none; color: white;">Login</a></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -79,15 +106,18 @@
             <h5>{{ komentar.user.user.username }}</h5>
             <span class="float-end">{{ komentar.waktu_ditambahkan|timesince }} lalu</span>
             <p>{{ komentar.teks }}</p>
-            <br style="border-bottom:1px solid solid rgb(202, 200, 200);">
+            <div class="my-3" style="border-bottom:1px solid rgb(202, 200, 200);"></div>
         {% endfor %}
-        <form method="POST" action="{% url 'lelang:komentar_barang_lelang' item.pk %}">
-            {% csrf_token %}
-            {{ form_komentar|crispy }}
-            <div class="container text-center mt-3">
-                <button type="submit" class="btn btn-primary">Tambah Komentar</button>
-            </div>
-        </form>
+        {% if request.user.is_authenticated %}
+            <form method="POST" action="{% url 'lelang:komentar_barang_lelang' item.pk %}">
+                {% csrf_token %}
+                {{ form_komentar|crispy }}
+                <div class="container text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Tambah Komentar</button>
+                </div>
+            </form>
+        {% endif %}
+        
     </div>
 </div>
 {% endblock content %}
