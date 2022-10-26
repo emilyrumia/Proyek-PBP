@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'general_user',
     'resipien',
     'lelang',
-    'customer_service'
+    'customer_service',
+    'testimoni'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
