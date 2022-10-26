@@ -6,8 +6,10 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="container bg-trasparent my-4 p-3 " style="position: relative;"> 
-    <h1 class="text-center mb-5">Daftar Barang Lelang</h1>
+<div class="container bg-trasparent my-4 p-3 " style="position: relative;">
+    <div class="p-3 mb-5" style="border-bottom:1px solid rgb(202, 200, 200);">
+        <h1 class="display-6 text-center ">Daftar Barang Lelang</h1>
+    </div>
     <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-5">
         {% for item in items %}
         <div class="col">
@@ -26,10 +28,10 @@
                             
                             <span class="float-end text-muted">Ditujukan untuk <strong>{{ item.galang_dana_tujuan.penggalang.user.first_name }} {{ item.galang_dana_tujuan.penggalang.user.last_name }}</strong></span>
                         </div> 
-                        <h5 class="card-title">{{ item.nama_barang }}</h5>
+                        <h5 class="card-title" style="color: rgb(70, 70, 70);">{{ item.nama_barang }}</h5>
                         {% load humanize %}
-                        <h4>Rp{{item.starting_bid|intcomma}}</h4>
-                        <span class="badge bg-secondary">{{ item.tanggal_berakhir|timeuntil }}</span> 
+                        <h5><strong>Rp{{item.bid_tertinggi|intcomma}}</strong></h5>
+                        <span class="badge bg-primary">{{ item.tanggal_berakhir|timeuntil }}</span> 
                     </div> 
                 </div> 
             </a>

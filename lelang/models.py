@@ -1,4 +1,5 @@
 import datetime
+from email.policy import default
 from django.utils.timesince import timesince
 from distutils.command import upload
 from django.db import models
@@ -26,6 +27,7 @@ class BarangLelang(models.Model):
     deskripsi = models.TextField(null=True, blank=True)
     gambar = models.ImageField(default="/lelang/upload/product-image-placeholder.jpg", upload_to="lelang/upload")
     starting_bid = models.PositiveIntegerField()
+    bid_tertinggi = models.PositiveIntegerField()
     tanggal_mulai = models.DateTimeField(auto_now_add=True, blank=True)
     tanggal_berakhir = models.DateTimeField()
     status_keaktifan = models.BooleanField(default=True)
@@ -44,3 +46,9 @@ class Bid(models.Model):
     user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
     barang_lelang = models.ForeignKey(BarangLelang, on_delete=models.RESTRICT)
     banyak_bid = models.PositiveIntegerField()
+
+class Komentar(models.Model):
+    user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
+    barang_lelang = models.ForeignKey(BarangLelang, on_delete=models.CASCADE)
+    waktu_ditambahkan = models.DateTimeField(auto_now_add=True, blank=True)
+    teks = models.TextField()

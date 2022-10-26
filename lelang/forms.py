@@ -28,3 +28,8 @@ class BiddingForm(forms.ModelForm):
     class Meta:
         model = Bid
         fields = ['banyak_bid']
+
+class KomentarForm(forms.ModelForm):
+    class Meta:
+        model = Komentar
+        fields = ['teks']

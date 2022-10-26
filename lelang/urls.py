@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.index, name="show_barang_lelang"),
     path('create_lelang/<int:galang_dana_id>', views.create_lelang, name="create_lelang"),
     path('<int:lelang_id>', views.rincian_lelang, name="rincian_lelang"),
+    path('bid_barang_lelang/<int:lelang_id>', views.bid_barang_lelang, name="bid_barang_lelang"),
+    path('komentar_barang_lelang/<int:lelang_id>', views.komentar_barang_lelang, name="komentar_barang_lelang")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
