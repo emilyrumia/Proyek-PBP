@@ -104,9 +104,9 @@
         <h3>Kolom Komentar</h3>
         {% for komentar in semua_komentar %}
             <h5>{{ komentar.user.user.username }}</h5>
-            <span class="float-end">{{ komentar.waktu_ditambahkan|timesince }} lalu</span>
             <p>{{ komentar.teks }}</p>
-            <div class="my-3" style="border-bottom:1px solid rgb(202, 200, 200);"></div>
+            <span class="float-end">{{ komentar.waktu_ditambahkan|timesince }} lalu</span>
+            <div class="my-3" style="border-bottom:1px solid rgb(202, 200, 200);"><br></div>
         {% endfor %}
         {% if request.user.is_authenticated %}
             <form method="POST" action="{% url 'lelang:komentar_barang_lelang' item.pk %}">
