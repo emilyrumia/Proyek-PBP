@@ -1,8 +1,22 @@
-.card.h-100.shadow-sm{
+.card.h-100{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    flex: 1 0 50% !important;
+    overflow: auto;
     transition: 0.1s;
 }
 
-.card.h-100.shadow-sm:hover{
+.card.h-100:hover{
     opacity: 0.8;
     cursor: pointer;
+}
+
+.img-container {
+    padding: 20px;
+    flex: 1 0 50% !important;
+    overflow: hidden;
+}
+
+.d-flex.justify-content-between.lelang{
+    padding: 30px 0;
+    border-bottom: 1px solid rgb(202, 200, 200);
 }
