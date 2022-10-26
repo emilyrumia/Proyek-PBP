@@ -10,10 +10,10 @@
 <h2 class="text-center mt-3">{{ item.nama_barang }}</h2>
 <div class="container-lg mt-5 px-5">
     <div class="row row-cols-1 row-cols-xs-1 row-cols-sm-1 row-cols-lg-2">
-        <div class="col-md-6 d-flex justify-content-center align-items-center" style="border: 1px solid rgb(202, 200, 200);">
-            <img src="\lelang{{ item.gambar.url }}" alt="{{ item.nama_barang }}" style="max-width: 100%;max-height: 100%;object-fit: cover;box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+        <div class="col-md-6 col-lg-5 d-flex justify-content-center align-items-center" style="border: 1px solid rgb(202, 200, 200);">
+            <img src="\lelang{{ item.gambar.url }}" alt="{{ item.nama_barang }}" style="max-width: 100%;max-height: 100%;object-fit: cover;box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 col-lg-7 ps-md-5">
             <div class="d-flex flex-column">
                 <div class="d-flex justify-content-between lelang">
                     <span>Bid Tertinggi:</span>
@@ -24,7 +24,7 @@
                         <span class="float-end text-muted">Harga Awal</span>
                         {% else %}
                         <h4><strong>Rp{{ bid_tertinggi.banyak_bid|intcomma }}</strong></h4>
-                        <span class="float-end text-muted">Oleh {{ bid_tertinggi.user.user.username }}</span>
+                        <span class="float-end text-muted">oleh {{ bid_tertinggi.user.user.username }}</span>
                         {% endif %}
                     </div>
                 </div>
@@ -32,8 +32,7 @@
                     <span>Lelang Berakhir Dalam:</span>
                     {% load humanize %}
                     <span>{{ item.tanggal_berakhir|timeuntil }} | <span class="text-muted">{{ item.tanggal_berakhir }}</span></span>
-                </div>    
-                
+                </div>
                 <div class="d-flex justify-content-between lelang">
                     <span>Kategori:</span>
                     <strong>{{ item.get_kategori_barang_display }}</strong>
@@ -48,7 +47,7 @@
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="container text-center mt-3">
-                            <button type="submit" class="btn btn-primary w-100">Bid</button>
+                            <button type="submit" class="btn btn-primary w-100" id="add-lelang-btn">Bid</button>
                         </div>
                     </form>
                     {% endif %}
@@ -70,7 +69,7 @@
                         Login terlebih dahulu agar bisa bidding
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary"><a href="{% url 'general_user:login' %}" style="text-decoration: none; color: white;">Login</a></button>
+                            <a href="{% url 'general_user:login' %}"><button type="button" class="btn btn-primary">Login</button></a>
                         </div>
                     </div>
                     </div>
@@ -87,7 +86,8 @@
                     <li>Digalang oleh {{ item.galang_dana_tujuan.penggalang.user.first_name }} {{ item.galang_dana_tujuan.penggalang.user.last_name }}</li>
                     <li>Dengan tajuk <strong>"{{ item.galang_dana_tujuan.judul }}"</strong></li>
                 </ul>
-                <button type="button" class="btn btn-primary"><a href="{% url 'general_user:homepage' %}" style="text-decoration: none; color: white;">Lihat Detail Galang Dana</a></button>
+                {% comment "general_user homepage" %}Harusnya resipien:detail_galang_dana dengan parameter kedua id dari galang dana{% endcomment %}
+                <a href="{% url 'general_user:homepage' %}"><button type="button" class="btn btn-primary">Lihat Detail Galang Dana</button></a>
             </div>
         </div>
         <div class="col-md-6">

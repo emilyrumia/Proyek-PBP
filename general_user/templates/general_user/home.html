@@ -9,10 +9,11 @@
     <div class="d-flex flex-column justify-content-center align-items-center vh-100">
         {% if request.user.is_authenticated %}
         <h1 class="text-center">Hello {{ request.user.first_name }}</h1>
-        <button type="button" class="btn btn-primary"><a href="{% url 'lelang:create_lelang' 1 %}" style="text-decoration: none; color: white;">Buat Lelang</a></button>
+        {% comment "lelangcreatelelang" %}1 hanya placeholder, harusnya itu adalah id galang dana{% endcomment %}
+        <a href="{% url 'lelang:create_lelang' 1 %}"><button type="button" class="btn btn-primary">Buat Lelang</button></a>
         {% else %}
         <h1 class="text-center">Hello world</h1>
-        <button type="button" class="btn btn-primary"><a href="{% url 'general_user:register' %}" style="text-decoration: none; color: white;">Sign-Up Now</a></button>
+        <a href="{% url 'general_user:register' %}"><button type="button" class="btn btn-primary">Sign-Up Now</button></a>
         {% endif %}
     </div>
 </div>
