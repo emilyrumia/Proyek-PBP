@@ -3,6 +3,7 @@
 
 {% block meta %}
 <link rel="stylesheet" href="{% static 'lelang/style.css' %}">
+<script src="{% static 'lelang/js/script.js' %}" type="text/javascript"></script> 
 {% endblock meta %}
 
 {% block content %}
@@ -18,7 +19,7 @@
                 <div class="d-flex justify-content-between lelang">
                     <span>Bid Tertinggi:</span>
                     {% load humanize %}
-                    <div>
+                    <div id="bid-tertinggi-{{item.pk}}">
                         {% if bid_tertinggi == None %}
                         <h4><strong>Rp{{ item.starting_bid|intcomma }}</strong></h4>
                         <span class="float-end text-muted">Harga Awal</span>
@@ -43,11 +44,11 @@
                 </div>
                 {% if request.user.is_authenticated %}
                     {% if request.user != item.pelelang.user %}
-                    <form method="POST" action="{% url 'lelang:bid_barang_lelang' item.pk %}" style="padding: 30px 0;">
+                    <form method="POST" action="{% url 'lelang:bid_barang_lelang' item.pk %}" style="padding: 30px 0;" id="form-bid">
                         {% csrf_token %}
                         {{ form|crispy }}
                         <div class="container text-center mt-3">
-                            <button type="submit" class="btn btn-primary w-100" id="add-lelang-btn">Bid</button>
+                            <button type="button" onclick="bidBarangLelang({{item.pk}})" class="btn btn-primary w-100">Bid</button>
                         </div>
                     </form>
                     {% endif %}
@@ -100,7 +101,7 @@
             </div>
         </div>
     </div>
-    <div class="container mt-5 komentar">
+    <div class="container mt-5 komentar" id="komentar-container-{{item_id}}">
         <h3>Kolom Komentar</h3>
         {% for komentar in semua_komentar %}
             <h5>{{ komentar.user.user.username }}</h5>
@@ -108,16 +109,15 @@
             <span class="float-end">{{ komentar.waktu_ditambahkan|timesince }} lalu</span>
             <div class="my-3" style="border-bottom:1px solid rgb(202, 200, 200);"><br></div>
         {% endfor %}
-        {% if request.user.is_authenticated %}
-            <form method="POST" action="{% url 'lelang:komentar_barang_lelang' item.pk %}">
-                {% csrf_token %}
-                {{ form_komentar|crispy }}
-                <div class="container text-center mt-3">
-                    <button type="submit" class="btn btn-primary">Tambah Komentar</button>
-                </div>
-            </form>
-        {% endif %}
-        
     </div>
+    {% if request.user.is_authenticated %}
+        <form method="POST" action="{% url 'lelang:komentar_barang_lelang' item.pk %}" id="form-komentar">
+            {% csrf_token %}
+            {{ form_komentar|crispy }}
+            <div class="container text-center mt-3">
+                <button type="button" onclick="addKomentar({{item.pk}})" class="btn btn-primary">Tambah Komentar</button>
+            </div>
+        </form>
+    {% endif %}
 </div>
 {% endblock content %}
