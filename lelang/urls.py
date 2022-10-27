@@ -1,7 +1,7 @@
 from django.urls import path
 from lelang import views
 from django.conf import settings
-from django.conf.urls.static import static
+
 
 app_name = "lelang"
 
@@ -13,4 +13,3 @@ urlpatterns = [
     path('komentar_barang_lelang/<int:lelang_id>', views.komentar_barang_lelang, name="komentar_barang_lelang")
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
