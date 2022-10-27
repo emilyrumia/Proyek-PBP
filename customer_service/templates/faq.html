@@ -1,0 +1,128 @@
+{% extends 'base_nav_user.html' %}
+
+{% block meta %}
+<title>FAQ</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- script untuk POST -->
+  <!-- <script>
+    $(document).ready(function(){
+        $("#submit-ques").click(function(){
+            $.ajax({
+                url: "{% url 'customer_service:add_pertanyaan' %}",
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    'kategori': $('#kategori').val(),
+                    'teks_pertanyaan': $('#teks_pertanyaan').val()
+                },
+                success: alert("Pertanyaan berhasil dikirim!")
+            });
+            $('#form-modal').reset();
+            $("#newModal").modal('hide');
+        });
+    });
+  </script> -->
+
+{% endblock meta %}
+
+
+<style>
+  #nav-bar {
+    position: fixed;
+    top: 0px;
+  }
+
+  
+
+</style>
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container-fluid">
+    <div class="d-flex flex-column align-items-center vh-100">
+      <h1 class="text-center" style="margin-top:130px">Frequently Asked Questions</h1>
+      <div class="row row-cols-1 row-cols-md-3 g-4" style="margin:30px">
+        <!-- Display faq -->
+        {% for faq in list_faq %}
+          <div class="col">
+            <div class="card">
+              <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+              <div class="card-header h5" style="vertical-align: middle;"><strong>{{faq.pertanyaan}}</strong>
+              </div>
+              <div class="card-body">
+                <p class="card-text">{{faq.jawaban}}</p>
+              </div>
+            </div>
+            <br>
+          </div>
+        {% endfor %}
+
+        {% if request.user.is_authenticated %}
+        {% for pertanyaan in list_pertanyaan %}
+        <div class="col">
+          <div class="card" id="display-pertanyaan">
+            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+            <div class="card-body">
+              <h5 class="card-title">{{pertanyaan.teks_pertanyaan}}</h5>
+              <form method="POST" action="{% url 'customer_service:add_jawaban' pertanyaan.pk %}">
+                {% csrf_token %}
+                {{ form_jawaban|crispy }}
+                <div class="container text-center mt-3">
+                  <button type="submit" class="btn btn-primary" id="submit-ans">Submit Answer</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <br>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+
+      {% if request.user.is_authenticated %}
+        <h2 class="text-center">Still have any question? 🤔</h2>
+        <br>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="margin-bottom:100px">
+          Ask here!
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalPertanyaan" tabindex="-1" aria-labelledby="modalPertanyaanLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title fs-5" id="modalPertanyaanLabel">What do you wanna ask?</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+              <!-- <form method="POST" action="{% url 'customer_service:add_pertanyaan' %}" id="form-modal">
+                {% csrf_token %}
+                {{ form_pertanyaan|crispy }}
+              </form> -->
+              <form method="POST" action="{% url 'customer_service:add_pertanyaan' %}" id="form-modal">
+                {% csrf_token %}
+                {{ form_pertanyaan|crispy }}
+                <div class="modal-footer">
+                  <div class="container text-center mt-3">
+                    <button type="submit" class="btn btn-primary" id="submit-ques">Submit Question</button>
+                  </div>
+                </div>
+              </form>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% else %}
+      <h2 class="text-center">Login to ask a new question! 😆</h2>
+      {% endif %}
+    </div>
+</div>
+
+
+
+{% endblock content %}
