@@ -22,6 +22,12 @@ def index(request):
     
     return render(request, "lelang/show_barang_lelang.html", context)
 
+def get_json_index(request):
+    barang_lelang = BarangLelang.objects.all().order_by('status_keaktifan', 'tanggal_berakhir')
+    response = json.loads(serializers.serialize('json', barang_lelang))
+    # for count, ele in enumerate(barang_lelang):
+    #     response[count]['username_galang_dana'] = barang_lelang[count]
+
 @login_required(login_url='/login')
 def create_lelang(request, galang_dana_id):
     form = BarangLelangForm()
@@ -67,7 +73,7 @@ def bid_barang_lelang(request, lelang_id):
             bid = form.save(commit=False)
             bid.user = GeneralUser.objects.get(user=request.user)
             bid.barang_lelang = barang_lelang
-            if bid.banyak_bid >= barang_lelang.bid_tertinggi:
+            if bid.banyak_bid > barang_lelang.bid_tertinggi:
                 barang_lelang.bid_tertinggi = bid.banyak_bid
                 barang_lelang.save()
                 bid.save()
