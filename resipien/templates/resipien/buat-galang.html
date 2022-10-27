@@ -1,0 +1,80 @@
+{% extends 'base_nav_user.html' %}
+
+{% load static %}
+
+{% block meta %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/resipien.css' %}">
+
+<title>Buat Galang Dana</title>
+
+<style>
+    p {
+        color: gray;
+        font-size: 15px;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        showRupiah();
+        layoutBootstrap();
+    });
+    
+
+    function showRupiah() {
+        var input = document.getElementById('input-target');
+        input.addEventListener('keyup', function(event) {
+            input.value =  formatRupiah(this.value, "Rp. ");
+        });
+    }
+
+
+    function formatRupiah(angka, prefix) {
+		var number_string = angka.replace(/[^,\d]/g, '').toString(),
+		split   		= number_string.split(','),
+		sisa     		= split[0].length % 3,
+		rupiah     		= split[0].substr(0, sisa),
+		ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+ 
+		if(ribuan){
+			separator = sisa ? '.' : '';
+			rupiah += separator + ribuan.join('.');
+		}
+ 
+		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+		return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+	}
+
+    function layoutBootstrap() {
+        var in_text = $("form :input[type='text']");
+        in_text.each(function () {
+            $(this).addClass('form-control')
+        });
+    }
+
+</script>
+
+{% endblock meta %}
+
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<form class="form-galang" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="container-form">
+        <div class="mb-3">
+            {{ formGalang|crispy }}
+        </div>
+    </div>
+    <br>
+    <button type="submit" id="btn-buat" class="btn" >Submit</button>
+</form>
+
+{% endblock content %}
