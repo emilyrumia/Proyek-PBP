@@ -4,43 +4,121 @@
 <head>
     {% load static %}
     <title>Testimoni</title>
-    
-    <link rel="stylesheet" href="{% static 'testimoni/testimoni.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'testimoni.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
-
     {% block meta %}
     {% endblock meta %}
 </head>
 
 <body>
-    <h1>TES INI TESTIMONI</h1>
+    
+    <!-- Memunculkan testimoni memakai cards -->
+    <div class="section">
+        <div class="container-fluid">
+            <div class="row g-3" id="testimoni_cards">
+            <!-- data task akan ditambahkan dengan AJAX get -->
+        </div>
+    </div>
+
+    <!-- Button untuk memunculkan modal -->
+    <div class="col-md-12 text-center">
+        <button type="button" class="button" data-toggle="modal" data-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
+    </div>
+
 </body>
 
+<!-- Modal untuk buat task baru -->
+<div class="modal fade" id="create_testimoni_modal" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+  
+            <div class="modal-header">
+                <h3 class="modal-title" id="titleModal">Testimoni Baru</h3>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+  
+            <div class="modal-body">
+                {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'testimoni:add_testimoni' %}" id="create_testimoni_form">
+                        {% csrf_token %}
+                        
+                        <div class="form-floating mb-3">
+                            <input type="text" name="nama" id="floatingNama" placeholder="Nama" class="form-control">
+                            <label for="floatingNama">Nama</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                          <input type="text" name="title" id="floatingTitle" placeholder="Title" class="form-control">
+                          <label for="floatingTitle">Judul Pesan</label>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <textarea type="text" name="pesan" id="floatingPesan" placeholder="Pesan" class="form-control" style="height: 100px"></textarea>
+                            <label for="floatingPesan">Pesan</label>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <input id="submit_testimoni" class="btn btn-success" type="submit" name="submit" value="Buat"/>
+                        </div>
+
+                {% else %}
+                        <p>Silahkan login terlebih dahulu untuk menambahkan testimoni</p>
+                        <div class="form-floating mb-3">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        </div>
+                {% endif %}
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
-    // Function untuk mengambil data berbentuk json secara asinkronus
     $(document).ready(function(){
-        $.getJSON("json/", function(data){
-        $.each(data, function(i, testimoni) {
+    $.getJSON("json/", function(data) {
+        $.each(data, function(key, testimoni) {
             $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
-                                    '<div class="card" style="width: 18rem;">' +
-                                        '<div class="card-body">' +
-                                        '<h5 id="title" class="card-title" style="font-weight: bold">' + "ntah ini apaan" + '</h5>' +
-                                        '<h6 id="date" class="card-subtitle mb-2 text-muted">' + testimoni.fields.nama + '</h6>' +
-                                        '<p id="description" class="card-text">' + testimoni.fields.pesan + '</p>' +
-                                        '</div>' +
-                                    '</div>'+
-                                    '</div>');
-        });
-        });
+                                            '<div class="card" style="width: 18rem;">' +
+                                            '<div class="card-body">' +
+                                                '<h5 id="title" class="card-title" style="font-weight: bold">' + testimoni.fields.title + '</h5>' +
+                                                '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + testimoni.fields.nama + '</h6>' +
+                                                '<p id="pesan" class="card-text">' + testimoni.fields.pesan + '</p>' +
+                                            '</div>' +
+                                            '</div>'+
+                                        '</div>');
+
+        })
     });
+});
+    $("#submit_testimoni").click(function(){
 
+        nama = $("#floatingNama").val();
+        title = $("#floatingTitle").val();
+        pesan = $("#floatingPesan").val();
+        csrftoken = Cookies.get('csrftoken');
+        
+        new_data = {
+            nama : nama,
+            title : title,
+            pesan : pesan,
+            csrfmiddlewaretoken : csrftoken
+        };
+        $.post('add-testimoni/', new_data);
 
+        $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
+                                                    '<div class="card" style="width: 18rem;">' +
+                                                    '<div class="card-body">' +
+                                                        '<h5 id="title" class="card-title" style="font-weight: bold">' + title + '</h5>' +
+                                                        '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + nama + '</h6>' +
+                                                        '<p id="pesan" class="card-text">' + pesan + '</p>' +
+                                                    '</div>' +
+                                                    '</div>'+
+                                                '</div>');
+
+        
+    });
 </script>
+
 {% endblock content %}
