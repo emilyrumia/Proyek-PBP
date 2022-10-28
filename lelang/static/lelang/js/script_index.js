@@ -30,10 +30,7 @@ $(document).ready(function(){
                         output = hours + " hours";
                     }
                 }
-                var imgSrc = `/media/${response[i]["fields"]["gambar"]}`;
-                var img = new Image(); 
-                img.onerror = function(){imgSrc = `https://tk-pbp-bidcare.s3.ap-southeast-1.amazonaws.com/${response[i]["fields"]["gambar"]}`};
-                img.src = imgSrc;
+                var imgSrc = `https://tk-pbp-bidcare.s3.ap-southeast-1.amazonaws.com/${response[i]["fields"]["gambar"]}`;
 
                 $('#container-index-lelang').append(
                     `<div class="col">
