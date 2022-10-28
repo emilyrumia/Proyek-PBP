@@ -4,6 +4,7 @@ from general_user.models import GeneralUser, RekeningBank
 
 class GalangDana(models.Model):
     user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
+    akun_bank = models.ForeignKey(RekeningBank, on_delete=models.CASCADE)
     tujuan = models.CharField(max_length=20)
     judul = models.CharField(max_length=255)
     deskripsi = models.TextField()

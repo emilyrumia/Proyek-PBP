@@ -69,12 +69,21 @@
 <form class="form-galang" enctype="multipart/form-data" method="POST">
     {% csrf_token %}
     <div class="container-form">
+        <h3>Detail Galang Dana</h3>
         <div class="mb-3">
             {{ formGalang|crispy }}
         </div>
     </div>
     <br>
-    <button type="submit" id="btn-buat" class="btn" >Submit</button>
+    <div class="container-form">
+        <h3>Detail Rekening Tujuan</h3>
+        <div class="mb-3">
+            {{ formBank|crispy }}
+        </div>
+        <br>
+        <button type="submit" id="btn-buat" class="btn" >Submit</button>
+        <br></br>
+    </div>
 </form>
 
 {% endblock content %}

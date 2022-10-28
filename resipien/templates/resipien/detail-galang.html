@@ -11,7 +11,32 @@
 <title>Buat Galang Dana</title>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<style>
+
+  #btn-komen {
+    background-color: #d28542;
+  }
+
+</style>
+
 <script>
+
+function submitKomentar(id) {
+  $.ajax({
+      type: "POST",
+      url: "{% url 'resipien:add-komentar' id %}",
+      data: {
+        csrfmiddlewaretoken: "{{ csrf_token }}", 
+        komen: $("#komen").val(),
+      },
+        dataType: "json",
+        success: function () {
+        refresh();
+        document.getElementById("komentar").value = "";
+      },
+  });
+}
 
 </script>
 
@@ -20,31 +45,34 @@
 
 {% block content %}
 
+{% load crispy_forms_tags %}
 
-<table style="width:100%">
-    <tr>
-      <th>1</th>
-      <th>1</th>
-      <th>1</th>
-      <th>1</th>
-      <th>1</th>
-      <th>1</th>
-      <th>1</th>
-    </tr>
-    {% comment %} Add the data below this line {% endcomment %}
-    <tr>
-        <th>{{galang.judul}}</th>
-        {% if galang.gambar %}
-          <th><img src="{{ galang.gambar.url}}"  style="max-height:300px"></th> 
-        {% else %}
-          <th>No Picture Available</th> 
-        {% endif %}
-        <th>{{galang.deskripsi}}</th>
-        <th>{{galang.target}}</th>
-        <th>{{galang.tujuan}}</th>
-        <th>{{galang.tanggal_pembuatan}}</th>
-        <th>{{galang.status_keaktifan}}</th>
-    </tr>
-  </table>
+<div id="container-detail">
+  <div id="container-data">
+    <div id="container-gambar">
+      {% if galang.gambar %}
+        <img id="img-detail" src="{{ galang.gambar.url}}" style="max-height:300px">
+      {% else %}
+        <img id="img-detail" src="{% static 'images/noimage.jpeg' %}" style="max-height:300px">
+      {% endif %}
+    </div>
+    <h1 id="judul-galang">{{galang.judul}}</h1>
+    <p>{{galang.deskripsi}}</p>
+    <p>{{galang.target}}</p>
+    <p>{{galang.judul}}</p>
+    <form id="formK" method="POST" >
+      {% csrf_token %}
+      <textarea id="komen" rows="7" cols="80" placeholder="Tulis komentar..."></textarea>
+      <a role="button"id="btn-komen" class="btn" onclick="submitKomentar('{{galang.id}}')" >Tambah Komentar</a>
+    </form>
+    
+    <div id="komentar"></div>
+    {% for komentar in komen %}
+      <h4>{{komentar.user.username}}</h4>
+      <p>{{komentar.komentar}}</p>
+    {% endfor %}
+
+  </div>
+</div>
   
 {% endblock content %}

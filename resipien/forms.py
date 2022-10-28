@@ -1,5 +1,4 @@
 from django import forms
-from resipien.models import Komentar
 
 class GalangForm(forms.Form):
 
@@ -19,7 +18,7 @@ class GalangForm(forms.Form):
 
     tujuan = forms.ChoiceField(label="Tujuan Keperluan", choices = TUJUAN_CHOICES)
     judul = forms.CharField(label="Judul", max_length=255, widget=forms.TextInput(attrs={'class':'form-control'}))
-    deskripsi = forms.CharField(label="Deskripsi", max_length=30, widget=forms.Textarea(attrs={'rows':15, 'class':'form-control'}))
+    deskripsi = forms.CharField(label="Deskripsi", widget=forms.Textarea(attrs={'rows':15, 'class':'form-control'}))
     target = forms.CharField(label="Target", widget=forms.TextInput(attrs={'class':'form-control', 'id': 'input-target'}))
     gambar = forms.ImageField(label="Gambar")
 
@@ -30,8 +29,3 @@ class GalangForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(GalangForm, self).__init__(*args, **kwargs)
         self.fields['gambar'].required = False
-
-class KomentarForm(forms.ModelForm):
-    class Meta:
-        model = Komentar
-        fields = ['komentar']
