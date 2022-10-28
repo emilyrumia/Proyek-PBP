@@ -30,12 +30,17 @@ $(document).ready(function(){
                         output = hours + " hours";
                     }
                 }
+                var imgSrc = `/media/${response[i]["fields"]["gambar"]}`;
+                var img = new Image(); 
+                img.onerror = function(){imgSrc = `https://tk-pbp-bidcare.s3.ap-southeast-1.amazonaws.com/${response[i]["fields"]["gambar"]}`};
+                img.src = imgSrc;
+
                 $('#container-index-lelang').append(
                     `<div class="col">
                     <a href="${response[i]["pk"]}" style="text-decoration:none; color:black;">
                         <div class="card border-light h-100 ">
                             <div class="img-container">
-                                <img src="/media/${response[i]["fields"]["gambar"]}" class="card-img-top" alt="${response[i]["fields"]["nama_barang"]}" style="max-width: 100%;max-height: 100%;object-fit: cover;"> 
+                                <img src="${imgSrc}" class="card-img-top" alt="${response[i]["fields"]["nama_barang"]}" style="max-width: 100%;max-height: 100%;object-fit: cover;"> 
                             </div>
                             <div class="card-body"> 
                                 <div class="clearfix mb-3"> 
@@ -57,3 +62,10 @@ $(document).ready(function(){
     }
     })  
 });
+
+function checkImage(imageSrc, good, bad) {
+    var img = new Image();
+    img.onload = good; 
+    img.onerror = bad;
+    img.src = imageSrc;
+}
