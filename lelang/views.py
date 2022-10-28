@@ -14,24 +14,20 @@ from django.core import serializers
 
 # Create your views here.
 def index(request):
-    daftar_barang_lelang = BarangLelang.objects.all().order_by('-status_keaktifan', 'tanggal_berakhir')
     daftar_kategori = {x[1] for x in BarangLelang.KATEGORI_CHOICES}
+    context = {
+        "daftar_kategori": daftar_kategori,
+    }
+    return render(request, "lelang/show_barang_lelang.html", context)
+
+def get_json_lelang(request):
+    daftar_barang_lelang = BarangLelang.objects.all().order_by('-status_keaktifan', 'tanggal_berakhir')
     for barang_lelang in daftar_barang_lelang:
         if timesince(barang_lelang.tanggal_berakhir)[0] != "0":
             barang_lelang.status_keaktifan = False
             barang_lelang.save()
-
-    context = {
-        "daftar_kategori": daftar_kategori,
-        "items": daftar_barang_lelang
-    }
-    
-    return render(request, "lelang/show_barang_lelang.html", context)
-
-def get_json_lelang(request):
-    barang_lelang = BarangLelang.objects.all().order_by('status_keaktifan', 'tanggal_berakhir')
-    response = json.loads(serializers.serialize('json', barang_lelang))
-    return JsonResponse(response)
+    response = json.loads(serializers.serialize('json', daftar_barang_lelang))
+    return JsonResponse(response, safe=False)
 
 
 @login_required(login_url='/login')

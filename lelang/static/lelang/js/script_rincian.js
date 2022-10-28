@@ -1,10 +1,3 @@
-$(document).ready(function(){
-    $('#dropdown-kategori').hover(function() {
-        $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeIn(100);
-    }, function() {
-        $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeOut(100);
-    });  
-});
 
 function konfirmasiBid(){
     const bid = $('input[name=banyak_bid]').val();
