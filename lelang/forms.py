@@ -1,3 +1,4 @@
+from django.utils import timezone
 from general_user.models import GeneralUser, RekeningBank
 from lelang.models import *
 from resipien.models import GalangDana
@@ -23,6 +24,13 @@ class BarangLelangForm(forms.ModelForm):
         widgets = {
             'tanggal_berakhir': DateInput(),
         }
+
+    def clean_tanggal_berakhir(self):
+        tanggal_berakhir = self.cleaned_data.get("tanggal_berakhir")
+        if (tanggal_berakhir <= timezone.now()):
+            raise forms.ValidationError("End date should be greater than start date.")
+        return tanggal_berakhir
+    
 
 class BiddingForm(forms.ModelForm):
     class Meta:

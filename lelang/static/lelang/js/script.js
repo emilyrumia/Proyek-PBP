@@ -1,3 +1,15 @@
+$(document).ready(function(){
+    $('#dropdown-kategori').hover(function() {
+        $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeIn(100);
+    }, function() {
+        $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeOut(100);
+    });  
+});
+
+function konfirmasiBid(){
+    const bid = $('input[name=banyak_bid]').val();
+    $('#confirmation-bid-modal').text(`Anda akan bid barang lelang ini sejumlah Rp${bid}`);
+}
 
 function bidBarangLelang(item_id){
     const serializedData = getFormData($('#form-bid'));
@@ -27,6 +39,7 @@ function bidBarangLelang(item_id){
             );
             $('input[name=banyak_bid]').val('');
             $("#modalBid").modal('show');
+            $('.modal-backdrop').remove();
             setTimeout(function(){
                 $("#modalBid").modal('hide');
             }, 1500);
@@ -53,7 +66,7 @@ function addKomentar(item_id){
             container.append(
                 `<h5>${response[0]["username"]}</h5>
                 <p>${response[0]["fields"]["teks"]}</p>
-                <span class="float-end">0 minutes lalu</span>
+                <span class="float-end">Baru saja</span>
                 <div class="my-3" style="border-bottom:1px solid rgb(202, 200, 200);"><br></div>`
             );
             $('textarea[name=teks]').val('');

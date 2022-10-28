@@ -3,12 +3,24 @@
 
 {% block meta %}
 <link rel="stylesheet" href="{% static 'lelang/style.css' %}">
+<script src="{% static 'lelang/js/script.js' %}" type="text/javascript"></script> 
 {% endblock meta %}
 
 {% block content %}
 <div class="container bg-trasparent my-4 p-3 " style="position: relative;">
     <div class="p-3 mb-5" style="border-bottom:1px solid rgb(202, 200, 200);">
         <h1 class="display-6 text-center ">Daftar Barang Lelang</h1>
+        <div class="dropdown" id="dropdown-kategori">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Kategori
+            </button>
+            <ul class="dropdown-menu">
+                {% for kategori in daftar_kategori %}
+                <li><button type="button" class="dropdown-item">{{kategori}}</button></li>
+                {% endfor %}
+                
+            </ul>
+        </div>
     </div>
     <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-3 g-5">
         {% for item in items %}
@@ -25,13 +37,16 @@
                             {% else %}
                             <span class="float-start badge rounded-pill bg-danger">Tidak Aktif</span> 
                             {% endif %}
-                            
-                            <span class="float-end text-muted">Ditujukan untuk <strong>{{ item.galang_dana_tujuan.penggalang.user.first_name }} {{ item.galang_dana_tujuan.penggalang.user.last_name }}</strong></span>
                         </div> 
                         <h5 class="card-title" style="color: rgb(70, 70, 70);">{{ item.nama_barang }}</h5>
                         {% load humanize %}
                         <h5><strong>Rp{{item.bid_tertinggi|intcomma}}</strong></h5>
+                        {% if item.status_keaktifan %}
                         <span class="badge bg-primary">{{ item.tanggal_berakhir|timeuntil }}</span> 
+                        {% else %}
+                        <span class="badge bg-primary">Lelang Selesai</span> 
+                        {% endif %}
+                        
                     </div> 
                 </div> 
             </a>

@@ -7,9 +7,11 @@ app_name = "lelang"
 
 urlpatterns = [
     path('', views.index, name="show_barang_lelang"),
+    path('get_json_lelang', views.get_json_lelang, name="get_json_lelang"),
     path('create_lelang/<int:galang_dana_id>', views.create_lelang, name="create_lelang"),
     path('<int:lelang_id>', views.rincian_lelang, name="rincian_lelang"),
     path('bid_barang_lelang/<int:lelang_id>', views.bid_barang_lelang, name="bid_barang_lelang"),
-    path('komentar_barang_lelang/<int:lelang_id>', views.komentar_barang_lelang, name="komentar_barang_lelang")
+    path('komentar_barang_lelang/<int:lelang_id>', views.komentar_barang_lelang, name="komentar_barang_lelang"),
+    # path('kategori/<str:nama_kategori>', views.show_lelang_by_kategori, name="show_lelang_by_kategori")
 ]
 

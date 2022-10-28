@@ -14,19 +14,25 @@ from django.core import serializers
 
 # Create your views here.
 def index(request):
-    barang_lelang = BarangLelang.objects.all().order_by('status_keaktifan', 'tanggal_berakhir')
+    daftar_barang_lelang = BarangLelang.objects.all().order_by('-status_keaktifan', 'tanggal_berakhir')
+    daftar_kategori = {x[1] for x in BarangLelang.KATEGORI_CHOICES}
+    for barang_lelang in daftar_barang_lelang:
+        if timesince(barang_lelang.tanggal_berakhir)[0] != "0":
+            barang_lelang.status_keaktifan = False
+            barang_lelang.save()
 
     context = {
-        "items": barang_lelang
+        "daftar_kategori": daftar_kategori,
+        "items": daftar_barang_lelang
     }
     
     return render(request, "lelang/show_barang_lelang.html", context)
 
-def get_json_index(request):
+def get_json_lelang(request):
     barang_lelang = BarangLelang.objects.all().order_by('status_keaktifan', 'tanggal_berakhir')
     response = json.loads(serializers.serialize('json', barang_lelang))
-    # for count, ele in enumerate(barang_lelang):
-    #     response[count]['username_galang_dana'] = barang_lelang[count]
+    return JsonResponse(response)
+
 
 @login_required(login_url='/login')
 def create_lelang(request, galang_dana_id):
@@ -48,9 +54,9 @@ def create_lelang(request, galang_dana_id):
     return render(request, "lelang/create_lelang.html", context)
 
 def rincian_lelang(request, lelang_id):
+    barang_lelang = BarangLelang.objects.get(pk=int(lelang_id))
     form = BiddingForm()
     form_komentar = KomentarForm()
-    barang_lelang = BarangLelang.objects.get(pk=int(lelang_id))
     bids = Bid.objects.filter(barang_lelang=lelang_id).order_by('-banyak_bid')
     bid_tertinggi = bids.first()
     semua_komentar = Komentar.objects.filter(barang_lelang=lelang_id)

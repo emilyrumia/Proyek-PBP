@@ -30,9 +30,12 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between lelang">
-                    <span>Lelang Berakhir Dalam:</span>
+                    <span>Selesai :</span>
                     {% load humanize %}
-                    <span>{{ item.tanggal_berakhir|timeuntil }} | <span class="text-muted">{{ item.tanggal_berakhir }}</span></span>
+                    {% if item.status_keaktifan %}
+                    <span>{{ item.tanggal_berakhir|timeuntil }} | 
+                    {% endif %}
+                    <span class="text-muted">{{ item.tanggal_berakhir }}</span></span>
                 </div>
                 <div class="d-flex justify-content-between lelang">
                     <span>Kategori:</span>
@@ -42,40 +45,70 @@
                     <span>Lelang Dibuat Oleh:</span>
                     <span>{{ item.pelelang.user.username }}</span>
                 </div>
-                {% if request.user.is_authenticated %}
-                    {% if request.user != item.pelelang.user %}
-                    <form method="POST" action="{% url 'lelang:bid_barang_lelang' item.pk %}" style="padding: 30px 0;" id="form-bid">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <div class="container text-center mt-3">
-                            <button type="button" onclick="bidBarangLelang({{item.pk}})" class="btn btn-primary w-100">Bid</button>
+                {% if item.status_keaktifan %}
+                    {% if request.user.is_authenticated %}
+
+                        {% if request.user != item.pelelang.user %}
+                        <form method="POST" action="{% url 'lelang:bid_barang_lelang' item.pk %}" style="padding: 30px 0;" id="form-bid">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <div class="container text-center mt-3">
+                                <button type="button" formnovalidate class="btn btn-primary w-100" onclick="konfirmasiBid()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    Bid
+                                </button>
+                            </div>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="confirmation-bid-modal"></div>
+                                    <div class="modal-footer">
+                                        <button type="button" onclick="bidBarangLelang({{item.pk}})" class="btn btn-success"  data-bs-dismiss="modal">Konfirmasi</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Tidak</button>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </form>
+                        {% endif %}
+                    {% else %}
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Bid
+                    </button>                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Informasi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            Login terlebih dahulu agar bisa bidding
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{% url 'general_user:login' %}"><button type="button" class="btn btn-primary">Login</button></a>
+                            </div>
                         </div>
-                    </form>
+                        </div>
+                    </div>
                     {% endif %}
                 {% else %}
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Bid
-                </button>
-                
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Informasi</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                        Login terlebih dahulu agar bisa bidding
-                        </div>
-                        <div class="modal-footer">
-                            <a href="{% url 'general_user:login' %}"><button type="button" class="btn btn-primary">Login</button></a>
-                        </div>
+                    {% if bid_tertinggi.banyak_bid == item.bid_tertinggi %}
+                    <div class="alert alert-info" role="alert">
+                        Lelang ini tidak dimenangkan oleh siapapun
                     </div>
+                    {% else %}
+                    <div class="alert alert-info" role="alert">
+                        Lelang ini sudah dimenangkan oleh <strong>{{bid_tertinggi.user.user.username}}</strong> dengan jumlah bid Rp{{ item.bid_tertinggi|intcomma }}
                     </div>
-                </div>
+                    {% endif %}
                 {% endif %}
+
             </div>
         </div>
     </div>
@@ -110,7 +143,7 @@
             <div class="my-3" style="border-bottom:1px solid rgb(202, 200, 200);"><br></div>
         {% endfor %}
     </div>
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated and item.status_keaktifan %}
         <form method="POST" action="{% url 'lelang:komentar_barang_lelang' item.pk %}" id="form-komentar">
             {% csrf_token %}
             {{ form_komentar|crispy }}
