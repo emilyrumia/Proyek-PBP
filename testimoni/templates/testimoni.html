@@ -12,18 +12,18 @@
 </head>
 
 <body>
-    <div class="card_background">
+    <!-- Button untuk memunculkan modal -->
+    <div class="col-md-12 text-center">
+        <button type="button" class="button" data-toggle="modal" data-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
+    </div>
+    
+    <div class="cards_container">
         <!-- Memunculkan testimoni memakai cards -->
         <div class="section">
             <div class="container-fluid">
                 <div class="row g-3" id="testimoni_cards">
                 <!-- data task akan ditambahkan dengan AJAX get -->
             </div>
-        </div>
-
-        <!-- Button untuk memunculkan modal -->
-        <div class="col-md-12 text-center">
-            <button type="button" class="button" data-toggle="modal" data-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
         </div>
     </div>
 </body>
@@ -43,19 +43,29 @@
                     <form method="POST" action="{% url 'testimoni:add_testimoni' %}" id="create_testimoni_form">
                         {% csrf_token %}
                         
+                        <p>Nama:</p>
                         <div class="form-floating mb-3">
                             <input type="text" name="nama" id="floatingNama" placeholder="Nama" class="form-control">
-                            <label for="floatingNama">Nama</label>
+                            <label for="floatingTitle">(Default : Anonymous)</label>
                         </div>
+                        <br>
 
+                        <p>Judul Pesan:</p>
                         <div class="form-floating mb-3">
                           <input type="text" name="title" id="floatingTitle" placeholder="Title" class="form-control">
-                          <label for="floatingTitle">Judul Pesan</label>
                         </div>
+                        <br>
                         
+                        <p>Target yang Tercapai:</p>
+                        <div class="form-floating mb-3">
+                            <input type="text" name="target" id="floatingTarget" placeholder="Target" class="form-control">
+                            <label for="floatingTarget">(Jika bukan resipien maka abaikan)</label>
+                          </div>
+                        <br>
+
+                        <p>Pesan:</p>
                         <div class="form-floating mb-3">
                             <textarea type="text" name="pesan" id="floatingPesan" placeholder="Pesan" class="form-control" style="height: 100px"></textarea>
-                            <label for="floatingPesan">Pesan</label>
                         </div>
                         
                         <div class="form-floating mb-3">
@@ -80,12 +90,17 @@
     $.getJSON("json/", function(data) {
         $.each(data, function(key, testimoni) {
             $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
-                                            '<div class="card" style="width: 18rem;">' +
-                                            '<div class="card-body">' +
-                                                '<h5 id="title" class="card-title" style="font-weight: bold">' + testimoni.fields.title + '</h5>' +
-                                                '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + testimoni.fields.nama + '</h6>' +
+                                            '<div class="card w-75">' +
+                                            '<h5 id="title" class="card-header text-white bg-dark mb-3" style="font-weight: bold">' + testimoni.fields.title + '</h5>' +
+                                            '<div class="card-body text-center">' +
                                                 '<p id="pesan" class="card-text">' + testimoni.fields.pesan + '</p>' +
                                             '</div>' +
+                                            '<div class="card_nama">' +
+                                                '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + testimoni.fields.nama + '</h6>' +
+                                            '</div>' +
+                                            '<ul class="list-group list-group-flush">' +
+                                                '<li class="list-group-item">' + "Target: " + testimoni.fields.target + '</li>' + 
+                                            '</ul' +
                                             '</div>'+
                                         '</div>');
 
@@ -96,24 +111,31 @@
 
         nama = $("#floatingNama").val();
         title = $("#floatingTitle").val();
+        target = $("#floatingTarget").val();
         pesan = $("#floatingPesan").val();
         csrftoken = Cookies.get('csrftoken');
         
         new_data = {
             nama : nama,
             title : title,
+            target : target,
             pesan : pesan,
             csrfmiddlewaretoken : csrftoken
         };
         $.post('add-testimoni/', new_data);
 
         $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
-                                                    '<div class="card" style="width: 18rem;">' +
-                                                    '<div class="card-body">' +
-                                                        '<h5 id="title" class="card-title" style="font-weight: bold">' + title + '</h5>' +
-                                                        '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + nama + '</h6>' +
+                                                    '<div class="card w-75">' +
+                                                    '<h5 id="title" class="card-header text-white bg-dark mb-3" style="font-weight: bold">' + title + '</h5>' +
+                                                    '<div class="card-body text-center">' +
                                                         '<p id="pesan" class="card-text">' + pesan + '</p>' +
                                                     '</div>' +
+                                                    '<div class="card_nama">' +
+                                                        '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + testimoni.fields.nama + '</h6>' +
+                                                    '</div>' +
+                                                    '<ul class="list-group list-group-flush">' +
+                                                        '<li class="list-group-item">' + "Target: " + target + '</li>' + 
+                                                    '</ul' +
                                                     '</div>'+
                                                 '</div>');
 

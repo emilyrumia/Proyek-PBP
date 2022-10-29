@@ -1,4 +1,5 @@
 import datetime
+from general_user.models import GeneralUser
 from testimoni.models import TestimoniList
 
 from django.http import HttpResponse, HttpResponseNotFound
@@ -29,12 +30,19 @@ def show_testimoni_json(request):
 @login_required(login_url='/login')
 def add_testimoni(request) :
     if request.method == "POST" :
-        user_logged_in = request.user
+        user_logged_in = GeneralUser.objects.get(user=request.user)
         nama = request.POST.get("nama")
         title = request.POST.get("title")
+        target = request.POST.get("target")
         pesan = request.POST.get("pesan")
 
-        testimoni_baru = TestimoniList(user=user_logged_in, nama=nama, title=title, pesan=pesan)
+        if len(nama) == 0 :
+            nama = "Anonymous"
+
+        if len(target) == 0 :
+            target = "-"
+
+        testimoni_baru = TestimoniList(user=user_logged_in, nama=nama, title=title, target=target, pesan=pesan)
         testimoni_baru.save()
 
         return redirect("testimoni:show_testimoni")

@@ -1,3 +1,13 @@
-.card_background{
+.cards_container{
+    display: grid;
+    max-width: 1800px;
+    margin : 50px auto;
+}
 
+.card-body{
+    background: transparent;
+}
+
+.card_nama{
+    margin : auto 15px;
 }
