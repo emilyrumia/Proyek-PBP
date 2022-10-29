@@ -12,12 +12,56 @@
 </head>
 
 <body>
-    <!-- Button untuk memunculkan modal -->
-    <div class="col-md-12 text-center">
-        <button type="button" class="button" data-toggle="modal" data-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
+
+    <h1 class="testimoniTitle">Testimoni BidCare</h1>
+
+    <div id="testimoniCarousel" class="carousel slide" data-ride="carousel">
+        
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#testimoniCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#testimoniCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#testimoniCarousel" data-bs-slide-to="2"></button>
+          </div>
+        
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <h1 style="color:white; opacity: 1;">{{ first_random_testimoni.nama }}</h1>
+                    <p style="color:white; opacity: 1;">"{{ first_random_testimoni.pesan }}"</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <h1 style="color:white; opacity: 1;">{{ second_random_testimoni.nama }}</h1>
+                    <p style="color:white; opacity: 1;">"{{ second_random_testimoni.pesan }}"</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <h1 style="color:white; opacity: 1;">{{ third_random_testimoni.nama }}</h1>
+                    <p style="color:white; opacity: 1;">"{{ third_random_testimoni.pesan }}"</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="carousel-control-prev" type="button" data-bs-target="#testimoniCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#testimoniCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
     </div>
-    
+
+
     <div class="cards_container">
+
+        <!-- Button untuk memunculkan modal -->
+        <div class="col-md-12 text-center">
+            <button type="button" class="button" data-toggle="modal" data-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
+        </div>
+
         <!-- Memunculkan testimoni memakai cards -->
         <div class="section">
             <div class="container-fluid">
