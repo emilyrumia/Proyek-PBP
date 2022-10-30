@@ -1,28 +1,20 @@
-from email.policy import default
 from django.db import models
 from general_user.models import GeneralUser, RekeningBank
 
 class GalangDana(models.Model):
-    PRIBADI = "PRIBADI"
-    KERABAT = "KERABAT"
-    LEMBAGA = "LEMBAGA"
-    OTHER = "OTHER"
-
-    KEPERLUAN_CHOICES = (
-        (PRIBADI, "Pribadi"),
-        (KERABAT, "Kerabat/Keluarga"),
-        (LEMBAGA, "Institusi/Lembaga"),
-        (OTHER, "Lainnya")
-    )
-    penggalang = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
-    rekening_bank = models.ForeignKey(RekeningBank, on_delete=models.RESTRICT)
+    user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
+    akun_bank = models.ForeignKey(RekeningBank, on_delete=models.CASCADE)
+    tujuan = models.CharField(max_length=20)
     judul = models.CharField(max_length=255)
-    deskripsi = models.TextField(null=True, blank=True)
-    gambar = models.ImageField()
-    target_galang_dana = models.PositiveIntegerField()
-    tanggal_berakhir = models.DateField()
+    deskripsi = models.TextField()
+    target = models.CharField(max_length=30)
+    gambar = models.ImageField(upload_to="resipien/", blank=True)
+    tanggal_pembuatan = models.DateField(auto_now_add=True)
+    tanggal_berakhir = models.DateField(default=None)
     status_keaktifan = models.BooleanField(default=True)
-    tujuan_keperluan = models.CharField(max_length=100, choices=KEPERLUAN_CHOICES, default=PRIBADI)
 
-    def __str__(self) -> str:
-        return self.judul
+class KomentarGalangDana(models.Model):
+    user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
+    objek_galang = models.ForeignKey(GalangDana, on_delete=models.CASCADE)
+    komentar = models.TextField()
+    tanggal_komentar = models.DateField(auto_now_add=True)

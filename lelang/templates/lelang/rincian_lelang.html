@@ -98,7 +98,7 @@
                     </div>
                     {% endif %}
                 {% else %}
-                    {% if bid_tertinggi.banyak_bid == item.bid_tertinggi %}
+                    {% if not bid_tertinggi %}
                     <div class="alert alert-info" role="alert">
                         Lelang ini tidak dimenangkan oleh siapapun
                     </div>
@@ -115,13 +115,24 @@
     <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2">
         <div class="col-md-6">
             <div class="d-flex flex-column justify-content-between lelang">
-                <h4>Detail Penggalang Dana Tujuan</h4>
+                <h4>Detail Galang Dana Tujuan</h4>
                 <ul>
-                    <li>Digalang oleh {{ item.galang_dana_tujuan.penggalang.user.first_name }} {{ item.galang_dana_tujuan.penggalang.user.last_name }}</li>
+                    <li>Digalang oleh {{ item.galang_dana_tujuan.user.user.first_name }} {{ item.galang_dana_tujuan.penggalang.user.last_name }}</li>
                     <li>Dengan tajuk <strong>"{{ item.galang_dana_tujuan.judul }}"</strong></li>
                 </ul>
+                <div class="alert alert-info" role="alert">
+                    <strong>Disclaimer:</strong> 70% Bid tertinggi dari lelang ini akan disumbangkan kepada galang dana tujuan
+                </div>
+                {% if bid_tertinggi %}
+                <span>Lelang ini menyumbang <strong>{{rasio_donasi|floatformat:3}}%</strong> dari target galang dana</span>
+                <span><strong>Rp{{bid_diberikan|floatformat:3|intcomma}}</strong>/{{item.galang_dana_tujuan.target}}</span>
+                <div class="progress mb-3">
+                    <div class="progress-bar" role="progressbar" aria-label="Basic example" style="width: {{rasio_donasi}}%" aria-valuenow="{{rasio_donasi}}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                {% endif %}
+                
                 {% comment "general_user homepage" %}Harusnya resipien:detail_galang_dana dengan parameter kedua id dari galang dana{% endcomment %}
-                <a href="{% url 'general_user:homepage' %}"><button type="button" class="btn btn-primary">Lihat Detail Galang Dana</button></a>
+                <a href="{% url 'resipien:detail' item.galang_dana_tujuan.pk %}"><button type="button" class="btn btn-primary">Lihat Detail Galang Dana</button></a>
             </div>
         </div>
         <div class="col-md-6">

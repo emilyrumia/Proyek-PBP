@@ -33,11 +33,11 @@
             <a class="nav-link" href="{% url 'lelang:show_barang_lelang' %}">Lihat Lelang</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#">Lihat Galang Dana</a>
+              <a class="nav-link" href="{% url 'resipien:daftar' %}">Lihat Galang Dana</a>
           </li>
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="#">Buat Penggalangan Dana</a>
+            <a class="nav-link" href="{% url 'resipien:buat' %}">Buat Penggalangan Dana</a>
           </li>
           {% endif %}
           <li class="nav-item">

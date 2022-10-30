@@ -13,6 +13,7 @@ function bidBarangLelang(item_id){
         data: serializedData,
         success: function (response) {
             const div = $(`#bid-tertinggi-${item_id}`);
+            const rasio_donasi = response[0]["fields"]["banyak_bid"]
             div.children('h4').children('strong').text(`Rp${response[0]["fields"]["banyak_bid"].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`);
             div.children('span').text(`oleh ${response[0]["username"]}`);
             div.append(

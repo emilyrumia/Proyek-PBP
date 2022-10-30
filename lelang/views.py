@@ -1,5 +1,6 @@
 from datetime import date, datetime
 import json
+from telnetlib import GA
 from urllib import response
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
@@ -32,6 +33,7 @@ def get_json_lelang(request):
 
 @login_required(login_url='/login')
 def create_lelang(request, galang_dana_id):
+    galang_dana_tujuan = GalangDana.objects.get(pk=galang_dana_id)
     form = BarangLelangForm()
     if (request.method == "POST"):
         form = BarangLelangForm(request.POST, request.FILES)
@@ -45,6 +47,7 @@ def create_lelang(request, galang_dana_id):
             return HttpResponseRedirect(reverse("lelang:rincian_lelang", args=[item.pk]))
     
     context = {
+        "galang_dana": galang_dana_tujuan,
         "form": form
     }
     return render(request, "lelang/create_lelang.html", context)
@@ -56,6 +59,9 @@ def rincian_lelang(request, lelang_id):
     bids = Bid.objects.filter(barang_lelang=lelang_id).order_by('-banyak_bid')
     bid_tertinggi = bids.first()
     semua_komentar = Komentar.objects.filter(barang_lelang=lelang_id)
+    
+    bid_diberikan = 0.7 * barang_lelang.bid_tertinggi
+    rasio_donasi = bid_diberikan / int(barang_lelang.galang_dana_tujuan.target.replace(".", "")[3:]) * 100
 
     context = {
         "form": form,
@@ -63,7 +69,9 @@ def rincian_lelang(request, lelang_id):
         "item": barang_lelang,
         "bids": bids,
         "bid_tertinggi": bid_tertinggi,
-        "semua_komentar": semua_komentar
+        "semua_komentar": semua_komentar,
+        "rasio_donasi": rasio_donasi,
+        "bid_diberikan": bid_diberikan
     }
     return render(request, "lelang/rincian_lelang.html", context)
 
