@@ -1,0 +1,50 @@
+[
+    {
+        "model": "customer_service.faq",
+        "pk": 1,
+        "fields": {
+            "pertanyaan": 1,
+            "jawaban": "Sejauh ini, bidCare baru tersedia dalam bentuk website"
+        }
+    },
+    {
+        "model": "customer_service.faq",
+        "pk": 2,
+        "fields": {
+            "pertanyaan": 2,
+            "jawaban": "Iya, pengguna yang dapat mengikuti lelang dan donasi hanyalah pengguna yang akunnya sudah terdaftar pada bidCare. Silahkan sign-up ataupun login untuk bergabung bersama kami 😊"
+        }
+    },
+    {
+        "model": "customer_service.faq",
+        "pk": 3,
+        "fields": {
+            "pertanyaan": 3,
+            "jawaban": "Lelang adalah proses jual beli barang dengan cara menjual barang kepada penawar harga tertinggi. Nantinya, 70% hasil dari penjualan tersebut akan didonasikan untuk para resipien."
+        }
+    },
+    {
+        "model": "customer_service.faq",
+        "pk": 4,
+        "fields": {
+            "pertanyaan": 4,
+            "jawaban": "Tidak ada, penawar dapat menawarkan harga setinggi yang ia mau. bidCare akan menjual barang yang dilelang kepada penawar dengan harga tertinggi."
+        }
+    },
+    {
+        "model": "customer_service.faq",
+        "pk": 5,
+        "fields": {
+            "pertanyaan": 5,
+            "jawaban": "Iya, resipien bisa menetapkan target nominal bantuan yang dibutuhkan."
+        }
+    },
+    {
+        "model": "customer_service.faq",
+        "pk": 6,
+        "fields": {
+            "pertanyaan": 6,
+            "jawaban": "Bisa, apabila semua resipien lainnya sudah terpenuhi juga kebutuhan bantuannya."
+        }
+    }
+]

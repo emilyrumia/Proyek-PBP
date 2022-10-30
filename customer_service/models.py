@@ -1,9 +1,10 @@
-from email.policy import default
-from random import choices
 from django.db import models
-from general_user.models import GeneralUser
 
 # Create your models here.
+class PertanyaanManager(models.Manager):
+    def get_by_natural_key(self, kategori, teks_pertanyaan):
+        return self.get(kategori=kategori, teks_pertanyaan=teks_pertanyaan)
+
 class Pertanyaan(models.Model):
 
     UMUM = "UMUM"
@@ -21,8 +22,16 @@ class Pertanyaan(models.Model):
     teks_pertanyaan = models.TextField(max_length=1000)
     is_answered = models.BooleanField(default=False)
 
+    objects = PertanyaanManager()
+
     def __str__(self):
         return self.teks_pertanyaan
+
+    # class Meta:
+    #     unique_together = [['kategori', 'teks_pertanyaan']]
+
+    def natural_key(self):
+        return (self.kategori, self.teks_pertanyaan)
 
     
 class FAQ(models.Model):

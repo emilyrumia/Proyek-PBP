@@ -11,7 +11,7 @@ class PertanyaanForm(forms.ModelForm):
         fields = ["kategori", "teks_pertanyaan"]
         widgets = {
             "kategori": forms.Select(attrs= { "id":"kategori" }),
-            "teks_pertanyaan": forms.TextInput(attrs= { "id":"teks_pertanyaan" })
+            "teks_pertanyaan": forms.Textarea(attrs= { "id":"teks_pertanyaan" })
         }
 
 
@@ -20,7 +20,11 @@ class JawabanForm(forms.ModelForm):
 
     class Meta:
         model = FAQ
+        # exclude = ["pertanyaan"]
         fields = ["jawaban"]
         widgets = {
-            "jawaban": forms.TextInput(attrs= { "id":"jawaban" })
+            "jawaban": forms.Textarea(attrs= { "id":"jawaban" })
         }
+
+
+
