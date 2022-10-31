@@ -86,9 +86,13 @@
             <div class="modal-body">
                 {% if user.is_authenticated %}
                     <!-- INI FORM -->
-                
-                
-                <form method="POST" action="{% url 'testimoni:add_testimoni' %}" id="create_testimoni_form">
+                    <form class="form" method="POST">
+                        {% csrf_token %}
+
+                        {{ testimoni_form|crispy }}
+                    </form>
+                    
+                <!-- <form method="POST" action="{% url 'testimoni:add_testimoni' %}" id="create_testimoni_form">
                         {% csrf_token %}
                         
                         <p>Nama:</p>
@@ -115,7 +119,7 @@
                         <div class="form-floating mb-3">
                             <textarea type="text" name="pesan" id="floatingPesan" placeholder="Pesan" class="form-control" style="height: 100px"></textarea>
                         </div>
-                        
+                         -->
                         <div class="form-floating mb-3">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                             <input id="submit_testimoni" class="btn btn-success" type="submit" name="submit" value="Buat"/>

@@ -1,5 +1,6 @@
 import random
 from testimoni.models import TestimoniList
+from testimoni.forms import TestimoniForm
 
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core import serializers
@@ -43,20 +44,45 @@ def show_random_testimoni(request):
 # Method untuk menambahkan testimoni (dibutuhkan login akun)
 @login_required(login_url='/login')
 def add_testimoni(request) :
+
     if request.method == "POST" :
-        nama = request.POST.get("nama")
-        title = request.POST.get("title")
-        target = request.POST.get("target")
-        pesan = request.POST.get("pesan")
+        testimoni_form = TestimoniForm(request.POST)
+        
+        if testimoni_form.is_valid() :
+            nama = testimoni_form.cleaned_data["nama"]
+            title = testimoni_form.cleaned_data["title"]
+            target = testimoni_form.cleaned_data["target"]
+            pesan = testimoni_form.cleaned_data["pesan"]
 
-        if len(nama) == 0 :
-            nama = "Anonymous"
+            if len(nama) == 0 :
+                nama = "Anonymous"
 
-        if len(target) == 0 :
-            target = "-"
+            if len(target) == 0 :
+                target = "-"
 
-        testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
-        testimoni_baru.save()
+            testimoni_form.save()
+            TestimoniList.create(nama=nama, title=title, target=target, pesan=pesan)
 
-        return redirect("testimoni:show_testimoni")
-    return HttpResponseNotFound()
+            context = {
+                'testimoni_form' : testimoni_form,
+            }    
+    
+    return render(request, 'testimoni.html', context)
+
+    # if request.method == "POST" :
+    #     nama = request.POST.get("nama")
+    #     title = request.POST.get("title")
+    #     target = request.POST.get("target")
+    #     pesan = request.POST.get("pesan")
+
+    #     if len(nama) == 0 :
+    #         nama = "Anonymous"
+
+    #     if len(target) == 0 :
+    #         target = "-"
+
+    #     testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
+    #     testimoni_baru.save()
+
+    #     return redirect("testimoni:show_testimoni")
+    # return HttpResponseNotFound()
