@@ -21,6 +21,13 @@ def index(request):
     }
     return render(request, "lelang/show_barang_lelang.html", context)
 
+def index_by_kategori(request, nama_kategori):
+    daftar_kategori = {x[1] for x in BarangLelang.KATEGORI_CHOICES}
+    context = {
+        "daftar_kategori": daftar_kategori,
+    }
+    return render(request, "lelang/show_barang_lelang.html", context)
+
 def get_json_lelang(request):
     daftar_barang_lelang = BarangLelang.objects.all().order_by('-status_keaktifan', 'tanggal_berakhir')
     for barang_lelang in daftar_barang_lelang:
@@ -30,6 +37,15 @@ def get_json_lelang(request):
     response = json.loads(serializers.serialize('json', daftar_barang_lelang))
     return JsonResponse(response, safe=False)
 
+def get_json_lelang_by_kategori(request, nama_kategori):
+    kategori = [x for (x, y) in BarangLelang.KATEGORI_CHOICES if y == nama_kategori][0]
+    daftar_barang_lelang = BarangLelang.objects.filter(kategori_barang=kategori).order_by('-status_keaktifan', 'tanggal_berakhir')
+    for barang_lelang in daftar_barang_lelang:
+        if timesince(barang_lelang.tanggal_berakhir)[0] != "0":
+            barang_lelang.status_keaktifan = False
+            barang_lelang.save()
+    response = json.loads(serializers.serialize('json', daftar_barang_lelang))
+    return JsonResponse(response, safe=False)
 
 @login_required(login_url='/login')
 def create_lelang(request, galang_dana_id):
@@ -75,6 +91,7 @@ def rincian_lelang(request, lelang_id):
     }
     return render(request, "lelang/rincian_lelang.html", context)
 
+@login_required(login_url='/login')
 def bid_barang_lelang(request, lelang_id):
     if request.method == "POST":
         form = BiddingForm(request.POST)
@@ -93,7 +110,8 @@ def bid_barang_lelang(request, lelang_id):
                 return JsonResponse(response, safe=False)
     
         return HttpResponseBadRequest(barang_lelang.bid_tertinggi)
-
+        
+@login_required(login_url='/login')
 def komentar_barang_lelang(request, lelang_id):
     if request.method == "POST":
         form = KomentarForm(request.POST)

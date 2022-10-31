@@ -5,6 +5,7 @@ $(document).ready(function(){
         $(this).find('.dropdown-menu').stop(true, true).delay(50).fadeOut(100);
     });
     const getTaskURL = window.location.href + "json";
+    
     $.ajax({
     type: 'GET',
     url: getTaskURL,
