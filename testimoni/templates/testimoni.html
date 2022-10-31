@@ -6,7 +6,6 @@
     <title>Testimoni</title>
     <link rel="stylesheet" href="{% static 'testimoni.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>    
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     {% load crispy_forms_tags %}
     {% block meta %}
     {% endblock meta %}
@@ -60,7 +59,7 @@
 
         <!-- Button untuk memunculkan modal -->
         <div class="col-md-12 text-center">
-            <button type="button" class="button" data-toggle="modal" data-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
+            <button type="button" class="button" data-bs-toggle="modal" data-bs-target="#create_testimoni_modal" style="text-decoration : none; color:black;">Buat Testimoni Baru</button>
         </div>
 
         <!-- Memunculkan testimoni memakai cards -->
@@ -74,7 +73,7 @@
 </body>
 
 <!-- Modal untuk buat task baru -->
-<div class="modal fade" id="create_testimoni_modal" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
+<div id="create_testimoni_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
   
@@ -91,14 +90,14 @@
                         {{ testimoni_form|crispy }}
                         <br>
                         <div class="form-floating mb-3">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             <button id="submit_testimoni" class="btn btn-success" type="submit">Buat</button>
                         </div>
 
                 {% else %}
                         <p>Silahkan login terlebih dahulu untuk menambahkan testimoni</p>
                         <div class="form-floating mb-3">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         </div>
                 {% endif %}
                     </form>
@@ -130,35 +129,52 @@
     });
 });
 
-    $("#submit_testimoni").click(function(){
+    $("#submit_testimoni").click(function(e){
+
+        e.preventDefault();
+
         $.ajax({
             type : 'POST',
             url : '/testimoni/add-testimoni/',        
-            data : {
-                csrfmiddlewaretoken : '{{ csrf_token }}',
-                'nama' : $('#id_nama').val(),
-                'title' : $('#id_title').val(),
-                'target' : $('#id_target').val(),
-                'pesan' : $('#id_pesan').val()    
-            },
+            data : $('#testimoni_form').serialize(),
             
             success: function(response){
+                nama = $('#id_nama').val(),
+                title = $('#id_title').val(),
+                target = $('#id_target').val(),
+                pesan = $('#id_pesan').val() 
+
+                new_data = {
+                    nama : nama,
+                    title : title,
+                    target : target,
+                    pesan : pesan,
+                    csrfmiddlewaretoken : '{{ csrf_token }}'
+                }
+
                 $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
                                                             '<div class="card w-75">' +
-                                                            '<h5 id="title" class="card-header text-white bg-dark mb-3" style="font-weight: bold">' + response.fields.title + '</h5>' +
+                                                            '<h5 id="title" class="card-header text-white bg-dark mb-3" style="font-weight: bold">' + title + '</h5>' +
                                                             '<div class="card-body text-center">' +
-                                                                '<p id="pesan" class="card-text">' + response.fields.pesan + '</p>' +
+                                                                '<p id="pesan" class="card-text">' + pesan + '</p>' +
                                                             '</div>' +
                                                             '<div class="card_nama">' +
-                                                                '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + response.fields.nama + '</h6>' +
+                                                                '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + nama + '</h6>' +
                                                             '</div>' +
                                                             '<ul class="list-group list-group-flush">' +
-                                                                '<li class="list-group-item">' + "Target: " + response.fields.target + '</li>' + 
+                                                                '<li class="list-group-item">' + "Target: " + target + '</li>' + 
                                                             '</ul' +
                                                             '</div>'+
                                                         '</div>');
-                                                                             
 
+                // Menghapus text dalam field setelah submit                                   
+                $("#id_nama").val('');
+                $("#id_title").val('');
+                $("#id_target").val('');
+                $("#id_pesan").val(''); 
+
+                // Menutup modal setelah submit
+                $('#create_testimoni_modal').modal('hide')
             },
             error: function(error){
                 console.log(error)

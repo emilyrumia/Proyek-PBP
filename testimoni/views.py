@@ -2,9 +2,9 @@ import random
 from testimoni.models import TestimoniList
 from testimoni.forms import TestimoniForm
 
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse
 from django.core import serializers
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -53,14 +53,7 @@ def add_testimoni(request) :
     target = request.POST.get("target")
     pesan = request.POST.get("pesan")
 
-    if len(nama) == 0 :
-        nama = "Anonymous"
-
-    if len(target) == 0 :
-        target = "-"
-
     testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
     testimoni_baru.save()
 
     return HttpResponse(status=200)
-
