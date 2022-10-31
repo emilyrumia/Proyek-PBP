@@ -1,5 +1,4 @@
 import random
-from general_user.models import GeneralUser
 from testimoni.models import TestimoniList
 
 from django.http import HttpResponse, HttpResponseNotFound
@@ -45,7 +44,6 @@ def show_random_testimoni(request):
 @login_required(login_url='/login')
 def add_testimoni(request) :
     if request.method == "POST" :
-        user_logged_in = GeneralUser.objects.get(user=request.user)
         nama = request.POST.get("nama")
         title = request.POST.get("title")
         target = request.POST.get("target")
@@ -57,7 +55,7 @@ def add_testimoni(request) :
         if len(target) == 0 :
             target = "-"
 
-        testimoni_baru = TestimoniList(user=user_logged_in, nama=nama, title=title, target=target, pesan=pesan)
+        testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
         testimoni_baru.save()
 
         return redirect("testimoni:show_testimoni")
