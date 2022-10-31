@@ -1,0 +1,322 @@
+{% extends 'base_nav_user.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block meta %}
+<title>LIST PERTANYAAN</title>
+
+<link rel="stylesheet" href="{% static 'faq.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="{% static 'faq.js' %}"></script> -->
+
+{% endblock meta %}
+
+
+{% block content %}
+<!-- {% load crispy_forms_tags %} -->
+
+<div class="container-fluid" style="position:relative">
+  <div class="d-flex flex-column align-items-center vh-100">
+
+    <div class="container" id="header" style="padding:50px">
+      <center><div class="card judul-page">
+        <div class="card-body">
+          <h2 class="text-center" style="padding-inline:10px; padding-block:2px;">List Pertanyaan</h2>
+        </div>
+      </div></center>
+
+      <!-- MODAL -->
+      <div class="modal fade" id="modalJawaban" tabindex="-1" aria-labelledby="modalJawabanLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title fs-5" id="modalJawabanLabel"></h2>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+        
+            <form id="form-jawaban">
+              {% csrf_token %}
+              {{ form_jawaban|crispy }}
+            
+            <div class="modal-footer">
+              <div class="container text-center mt-3">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="#modalJawaban" onclick="submitAnswer(this.id)" id="submit-ans">Submit Answer</button>
+              </div>
+            </div>
+            </form>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container text-center" style="padding:50px">
+        <div class="row row-cols-4 g-4" id="display-pertanyaan">
+        </div>
+      </div>
+
+      <div class="move-page" style="padding:50px;">
+        <center><button type="button" class="btn btn-primary btn-lg">
+          <a href="{% url 'customer_service:show_faq' %}" style="text-decoration: none; color: white;">
+        Kembali ke halaman FAQ
+      </a></button></center>
+
+    <!-- </div> -->
+</div>
+
+<script>
+  // Script untuk FORM PERTANYAAN 
+  // $(document).ready(function(){
+  //     $("#submitques").click(function(){
+  function submitPertanyaan() {
+        // e.preventDefault();
+        
+        $.ajax({
+            url: "{% url 'customer_service:add_pertanyaan' %}",
+            type: 'POST',
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}',
+                'kategori': $('#kategori').val(),
+                'teks_pertanyaan': $('#teks_pertanyaan').val() }, 
+            // success: function(res) {
+            //   $('#form-modal')[0].reset();
+            //   $("#modalPertanyaan").modal('hide');
+            //   displayPertanyaan() }
+            // success: alert("Pertanyaan berhasil dikirim!")
+            success: function(res){
+              // document.getElementById("display-pertanyaan").innerHTML = ""
+
+              // ini udh ga guna sih, hapus hrsnya aman
+              var html = `<div class="col">
+                          <div class="card">
+                            <div class="card-header h5" style="vertical-align: middle;">
+                              <strong> ${res.fields.teks_pertanyaan} </strong></div>
+                            <div class="card-body">
+                            <form id="${res.pk}">
+                              {% csrf_token %}
+                              {{ form_jawaban|crispy }}
+                            <div class="container text-center mt-3">
+                                <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${res.pk}")' id="submit-ans">Submit Answer</button>
+                            </div>
+                            </form>
+                          </div>
+                        </div>
+                        <br>
+                      </div>`
+
+              $('#display-pertanyaan').append(html)
+              // alert("Pertanyaan berhasil dikirim!")
+              // displayPertanyaan()
+            // //  document.getElementById("display-pertanyaan").innerHTML = html
+                
+            }
+        });
+        $('#form-modal')[0].reset();
+        $("#modalPertanyaan").modal('hide');
+        
+  //     });
+  // });
+      }
+  
+
+  // Script untuk FORM JAWABAN
+  // $(document).ready(function(){
+  function submitAnswer(id) {
+      // $("#submit-ans").click(function(){
+        // e.preventDefault();
+        alert("ketrigger cuyy")
+        $.ajax({
+          url: "add-jawaban/"+id,
+          type: 'POST',
+          data: { csrfmiddlewaretoken: '{{ csrf_token }}',
+                'jawaban': $('#jawaban').val() }, 
+          success: function(res) {
+            
+            var html = `<div class="col">
+                          <div class="card">
+                            <div class="card-header h5" style="vertical-align: middle;">
+                              <strong>${res.fields.pertanyaan.fields.teks_pertanyaan}</strong></div>
+                              <div class="card-body">
+                                <p class="card-text">${res.fields.jawaban}</p>
+                              </div>
+                            </div>
+                          <br>
+                        </div>`
+                              
+            $('#display-faq').append(html)
+
+            displayPertanyaan()
+
+            alert("berhasil cuyy")
+    
+          }
+        }); 
+
+        $('#form-jawaban')[0].reset();
+        $("#modalJawaban").modal('hide');
+      
+  }
+
+  // Script untuk MENAMPILKAN FAQ
+  function displayFAQ() {
+    $.ajax({
+        url: "{% url 'customer_service:jsonFAQ' %}",
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+          var htmlString = ""
+          // $.each(res, function(key, value) {
+          //   htmlString += "<div class=\"col\">" + 
+          //                   "<div class=\"card\">" +
+          //                     "<div class=\"card-header h5\" style=\"vertical-align: middle\">" +
+          //                       "<strong>" + res[key].fields.pertanyaan[1] + "</strong></div>" +
+          //                       "<div class=\"card-body\">" +
+          //                         "<p class=\"card-text\">" + res[key].fields.jawaban + "</p>" +
+          //                      "</div>" +
+          //                     "</div>" +
+          //                   "<br>" +
+          //                 "</div>"
+          // })
+          res.forEach((faq) => {
+            // htmlString += `<div class="col">
+            //                 <div class="card">
+            //                   <div class="card-header h5" style="vertical-align: middle;">
+            //                     <strong> ${faq.fields.pertanyaan[1]} </strong></div>
+            //                     <div class="card-body">
+            //                       <p class="card-text">${faq.fields.jawaban}</p>
+            //                     </div>
+            //                   </div>
+            //                 <br>
+            //               </div>`
+
+            if (faq.fields.pertanyaan[0] == "UMUM") {
+              htmlString += `<button class="accordion"><strong>${faq.fields.pertanyaan[1]}</strong></button>
+                                <div class="panel">
+                                    <h6 style="margin-block: 18px;">${faq.fields.jawaban}</h6>
+                                </div>
+                            <span class="break"></span>`
+            } else if (faq.fields.pertanyaan[0] == "LELANG") {
+              htmlString += `<button class="accordion" style="background-color:rgb(255, 174, 174) ;">
+                              <strong>${faq.fields.pertanyaan[1]}</strong></button>
+                                <div class="panel">
+                                    <h6 style="margin-block: 18px;">${faq.fields.jawaban}</h6>
+                                </div>
+                            <span class="break"></span>`
+            } else {
+              htmlString += `<button class="accordion" style="background-color:rgb(221, 189, 251)">
+                              <strong>${faq.fields.pertanyaan[1]}</strong></button>
+                                <div class="panel">
+                                    <h6 style="margin-block: 18px;">${faq.fields.jawaban}</h6>
+                                </div>
+                            <span class="break"></span>`
+            }
+
+          }); 
+
+          $('#display-faq').html(htmlString)
+        }
+    });
+  }
+
+  // JQUERY BUAT GITUIN MODAL PLS BS DONG HUHU 
+  $(document).ready(function(){
+    const modalJawaban = document.getElementById('modalJawaban')
+    modalJawaban.addEventListener('show.bs.modal', event => {
+
+      // Button that triggered the modal
+      const button = event.relatedTarget
+
+      // Extract info from data-bs-* attributes
+      const id = button.getAttribute('data-bs-id')
+      const qs = button.getAttribute('data-bs-qs')
+
+      // If necessary, you could initiate an AJAX request here
+      // and then do the updating in a callback.
+      // Change id of form-jawaban
+      let btn = document.getElementById('submit-ans')
+      btn.id = id
+
+      // Update the modal's content.
+      const modalTitle = modalJawaban.querySelector('.modal-title')
+      // const modalBody = modalJawaban.querySelector('.modal-body')
+
+      modalTitle.textContent = qs
+
+    })
+  })
+
+  // Script untuk MENAMPILKAN PERTANYAAN  
+  function displayPertanyaan() {
+    alert("displaypert")
+    $.ajax({
+        url: "{% url 'customer_service:jsonPertanyaan' %}",
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+          var htmlString = ""
+          res.forEach((pertanyaan) => {
+            htmlString += `<div class="col">
+                          <div class="card">
+                            <div class="card-body">
+                            <h5 class="card-title" style="padding:10px;">${pertanyaan.fields.teks_pertanyaan}</h5>
+                            <div class="btn-toolbar w-100 container g-4 mt-3" style="padding:5px">
+                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalJawaban" 
+                                data-bs-id=${pertanyaan.pk} data-bs-qs="${pertanyaan.fields.teks_pertanyaan}">
+                                Answer</button>
+                              <button type="button" class="btn btn-danger" onclick='deletePertanyaan("${pertanyaan.pk}")' id="btn-delete">Delete</button>
+                            </div>
+                          </div>
+                        </div>
+                        <br>
+                      </div>`
+          }); 
+          $('#display-pertanyaan').html(htmlString)
+          alert("BERHASIL displaypert")
+        }
+    });
+  }
+
+  
+
+  function deletePertanyaan(id){ 
+        $.ajax({
+            url: "delete/"+id,
+            type: "DELETE",
+            success: function(res){
+                // $("#col-" + id).remove();
+                alert("berhasil dihapus")
+                displayPertanyaan()
+            }
+        });
+    }
+
+  // Displaying for the first time
+  $(document).ready(displayPertanyaan())
+  $(document).ready(displayFAQ())
+
+// </script>
+
+
+{% endblock content %}
+
+<!-- htmlString += `<div class="col">
+  <div class="card">
+    <div class="card-header h5" style="vertical-align: middle;">
+      <strong> ${pertanyaan.fields.teks_pertanyaan} </strong></div>
+    <div class="card-body">
+    <div class="container col-2 mt-3">
+        <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${pertanyaan.pk}")' id="submit-ans">Answer</button>
+        <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${pertanyaan.pk}")' id="submit-ans">Delete</button>
+    </div>
+  </div>
+</div>
+<br>
+</div>` -->
+
+
+<!-- <button type="button" class="btn btn-primary" id="btn-answer">
+  <a href="/customer_service/pertanyaan-masuk/jawab/${pertanyaan.pk}" style="text-decoration: none; color: white;">
+  Answer</a></button> -->

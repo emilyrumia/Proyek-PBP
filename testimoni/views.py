@@ -20,8 +20,11 @@ def show_testimoni(request) :
     second_random_testimoni = random_testimoni[1]
     third_random_testimoni = random_testimoni[2]
 
+    testimoni_form = TestimoniForm(request.POST)
+
     context = {
         'list_testimoni' : list_testimoni,
+        'testimoni_form' : testimoni_form,
         'first_random_testimoni' : first_random_testimoni,
         'second_random_testimoni' : second_random_testimoni,
         'third_random_testimoni' : third_random_testimoni
@@ -45,44 +48,19 @@ def show_random_testimoni(request):
 @login_required(login_url='/login')
 def add_testimoni(request) :
 
-    if request.method == "POST" :
-        testimoni_form = TestimoniForm(request.POST)
-        
-        if testimoni_form.is_valid() :
-            nama = testimoni_form.cleaned_data["nama"]
-            title = testimoni_form.cleaned_data["title"]
-            target = testimoni_form.cleaned_data["target"]
-            pesan = testimoni_form.cleaned_data["pesan"]
+    nama = request.POST.get("nama")
+    title = request.POST.get("title")
+    target = request.POST.get("target")
+    pesan = request.POST.get("pesan")
 
-            if len(nama) == 0 :
-                nama = "Anonymous"
+    if len(nama) == 0 :
+        nama = "Anonymous"
 
-            if len(target) == 0 :
-                target = "-"
+    if len(target) == 0 :
+        target = "-"
 
-            testimoni_form.save()
-            TestimoniList.create(nama=nama, title=title, target=target, pesan=pesan)
+    testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
+    testimoni_baru.save()
 
-            context = {
-                'testimoni_form' : testimoni_form,
-            }    
-    
-    return render(request, 'testimoni.html', context)
+    return HttpResponse(status=200)
 
-    # if request.method == "POST" :
-    #     nama = request.POST.get("nama")
-    #     title = request.POST.get("title")
-    #     target = request.POST.get("target")
-    #     pesan = request.POST.get("pesan")
-
-    #     if len(nama) == 0 :
-    #         nama = "Anonymous"
-
-    #     if len(target) == 0 :
-    #         target = "-"
-
-    #     testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
-    #     testimoni_baru.save()
-
-    #     return redirect("testimoni:show_testimoni")
-    # return HttpResponseNotFound()

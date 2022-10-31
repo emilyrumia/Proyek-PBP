@@ -85,44 +85,14 @@
   
             <div class="modal-body">
                 {% if user.is_authenticated %}
-                    <!-- INI FORM -->
-                    <form class="form" method="POST">
-                        {% csrf_token %}
 
+                    <form id="testimoni_form" class="form" method="POST">
+                        {% csrf_token %}
                         {{ testimoni_form|crispy }}
-                    </form>
-                    
-                <!-- <form method="POST" action="{% url 'testimoni:add_testimoni' %}" id="create_testimoni_form">
-                        {% csrf_token %}
-                        
-                        <p>Nama:</p>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="nama" id="floatingNama" placeholder="Nama" class="form-control">
-                            <label for="floatingTitle">(Default : Anonymous)</label>
-                        </div>
                         <br>
-
-                        <p>Judul Pesan:</p>
-                        <div class="form-floating mb-3">
-                          <input type="text" name="title" id="floatingTitle" placeholder="Title" class="form-control">
-                        </div>
-                        <br>
-                        
-                        <p>Target yang Tercapai:</p>
-                        <div class="form-floating mb-3">
-                            <input type="text" name="target" id="floatingTarget" placeholder="Target" class="form-control">
-                            <label for="floatingTarget">(Jika bukan resipien maka abaikan)</label>
-                          </div>
-                        <br>
-
-                        <p>Pesan:</p>
-                        <div class="form-floating mb-3">
-                            <textarea type="text" name="pesan" id="floatingPesan" placeholder="Pesan" class="form-control" style="height: 100px"></textarea>
-                        </div>
-                         -->
                         <div class="form-floating mb-3">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                            <input id="submit_testimoni" class="btn btn-success" type="submit" name="submit" value="Buat"/>
+                            <button id="submit_testimoni" class="btn btn-success" type="submit">Buat</button>
                         </div>
 
                 {% else %}
@@ -159,39 +129,41 @@
         })
     });
 });
+
     $("#submit_testimoni").click(function(){
+        $.ajax({
+            type : 'POST',
+            url : '/testimoni/add-testimoni/',        
+            data : {
+                csrfmiddlewaretoken : '{{ csrf_token }}',
+                'nama' : $('#id_nama').val(),
+                'title' : $('#id_title').val(),
+                'target' : $('#id_target').val(),
+                'pesan' : $('#id_pesan').val()    
+            },
+            
+            success: function(response){
+                $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
+                                                            '<div class="card w-75">' +
+                                                            '<h5 id="title" class="card-header text-white bg-dark mb-3" style="font-weight: bold">' + response.fields.title + '</h5>' +
+                                                            '<div class="card-body text-center">' +
+                                                                '<p id="pesan" class="card-text">' + response.fields.pesan + '</p>' +
+                                                            '</div>' +
+                                                            '<div class="card_nama">' +
+                                                                '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + response.fields.nama + '</h6>' +
+                                                            '</div>' +
+                                                            '<ul class="list-group list-group-flush">' +
+                                                                '<li class="list-group-item">' + "Target: " + response.fields.target + '</li>' + 
+                                                            '</ul' +
+                                                            '</div>'+
+                                                        '</div>');
+                                                                             
 
-        nama = $("#floatingNama").val();
-        title = $("#floatingTitle").val();
-        target = $("#floatingTarget").val();
-        pesan = $("#floatingPesan").val();
-        csrftoken = Cookies.get('csrftoken');
-        
-        new_data = {
-            nama : nama,
-            title : title,
-            target : target,
-            pesan : pesan,
-            csrfmiddlewaretoken : csrftoken
-        };
-        $.post('add-testimoni/', new_data);
-
-        $("#testimoni_cards").append('<div class="col-12 col-md-6 col-lg-4">' +
-                                                    '<div class="card w-75">' +
-                                                    '<h5 id="title" class="card-header text-white bg-dark mb-3" style="font-weight: bold">' + title + '</h5>' +
-                                                    '<div class="card-body text-center">' +
-                                                        '<p id="pesan" class="card-text">' + pesan + '</p>' +
-                                                    '</div>' +
-                                                    '<div class="card_nama">' +
-                                                        '<h6 id="nama" class="card-subtitle mb-2 text-muted">' + "from: " + testimoni.fields.nama + '</h6>' +
-                                                    '</div>' +
-                                                    '<ul class="list-group list-group-flush">' +
-                                                        '<li class="list-group-item">' + "Target: " + target + '</li>' + 
-                                                    '</ul' +
-                                                    '</div>'+
-                                                '</div>');
-
-        
+            },
+            error: function(error){
+                console.log(error)
+            },
+        })
     });
 </script>
 
