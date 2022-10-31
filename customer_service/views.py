@@ -46,18 +46,31 @@ def pertanyaan_masuk(request):
     
     return render(request, "pertanyaan_masuk.html", context)
 
-@staff_member_required
-def jawab(request,id):
-    form_jawaban = JawabanForm(request.POST)
-    pertanyaan = Pertanyaan.objects.get(id=id)
+# @staff_member_required
+# def jawab(request,id):
+#     form_jawaban = JawabanForm(request.POST)
+#     pertanyaan = Pertanyaan.objects.get(id=id)
 
-    context = { 
-        "form_jawaban" : form_jawaban,
-        "pertanyaan" : pertanyaan,
-        "pk" : id
-    }
+#     context = { 
+#         "form_jawaban" : form_jawaban,
+#         "pertanyaan" : pertanyaan,
+#         "pk" : id
+#     }
     
-    return render(request, "jawab.html", context)
+#     return render(request, "jawab.html", context)
+
+# @staff_member_required
+# def jawab(request,id):
+#     form_jawaban = JawabanForm(request.POST)
+#     pertanyaan = Pertanyaan.objects.get(id=id)
+
+#     context = { 
+#         "form_jawaban" : form_jawaban,
+#         "pertanyaan" : pertanyaan,
+#         "pk" : id
+#     }
+    
+#     return render(request, "jawab.html", context)
 
 @csrf_exempt
 def deletePertanyaan(request,id):
@@ -134,6 +147,7 @@ def add_pertanyaan(request):
                         "is_answered": new_pertanyaan.is_answered } }
    
     return JsonResponse(res)
+
 #     return HttpResponse()
 
     # return redirect('customer_service:show_faq')
@@ -141,27 +155,40 @@ def add_pertanyaan(request):
 
 # @login_required(login_url='/general_user/login/')
 # def add_pertanyaan(request):
-#     form_pertanyaan = PertanyaanForm()
+#     if request.method == "POST":
+#         new_pertanyaan = PertanyaanForm(request.POST)
+#         if new_pertanyaan.is_valid():
+#             new_pertanyaan.save(commit=False)
+#             new_pertanyaan.save()
 
-#     if request.method == 'POST':
-#         form_pertanyaan = PertanyaanForm(request.POST)
-#         if form_pertanyaan.is_valid():
-#             form_pertanyaan.save()
-#             return redirect('customer_service:show_faq')
+#             res = { "model": "customer_service.pertanyaan", 
+#                     "pk": new_pertanyaan.pk, 
+#                     "fields": { "kategori": new_pertanyaan.kategori, 
+#                                 "teks_pertanyaan": new_pertanyaan.teks_pertanyaan, 
+#                                 "is_answered": new_pertanyaan.is_answered } }
+
+#             return JsonResponse(res)
 
 
 # @login_required(login_url='/general_user/login/')
 # def add_jawaban(request, id):
-#     # form_jawaban = JawabanForm()
+#     if request.method == "POST":
+#         form_jawaban = JawabanForm(request.POST)
+#         if form_jawaban.is_valid():
+#             new_faq = form_jawaban.save(commit=False)
+#             pertanyaan = Pertanyaan.objects.get(id=id)
+#             pertanyaan.is_answered = True
+#             pertanyaan.save()
+#             new_faq.pertanyaan = pertanyaan
+#             new_faq.save()
 
-#     # if request.method == 'POST':
-#     form_jawaban = JawabanForm(request.POST)
-#         # form_jawaban.instance.user = request.user
-#     if form_jawaban.is_valid():
-#         faq = form_jawaban.save(commit=False)
-#         pertanyaan = Pertanyaan.objects.get(id=id)
-#         pertanyaan.is_answered = True
-#         pertanyaan.save()
-#         faq.pertanyaan = pertanyaan
-#         faq.save()
-#         return redirect('customer_service:show_faq')
+#             res = { "model": "customer_service.faq", 
+#                 "pk": new_faq.pk, 
+#                 "fields": { "pertanyaan": { "model": "customer_service.pertanyaan", 
+#                                             "pk": new_faq.pertanyaan.pk, 
+#                                             "fields": { "kategori": new_faq.pertanyaan.kategori, 
+#                                                         "teks_pertanyaan": new_faq.pertanyaan.teks_pertanyaan, 
+#                                                         "is_answered": new_faq.pertanyaan.is_answered } }, 
+#                             "jawaban": new_faq.jawaban } }
+
+#             return JsonResponse(res)

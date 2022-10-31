@@ -19,66 +19,30 @@
 
 <div class="container-fluid" style="position:relative">
   <div class="d-flex flex-column align-items-center vh-100">
-    <h1 class="text-center" style="padding:50px">Frequently Asked Questions</h1>
 
-      <!-- DISPLAY FAQ -->
-      <!-- <div class="container">
-          <div class="row row-cols-3 g-4" id="display-faq">
-
-          </div>
-      </div> -->
-      <div class="container" id="display-faq"></div>   
-        
-
-      <!-- {% if request.user.is_authenticated %}
-      <div class="container">
-        <div class="row row-cols-3 g-4">
-          {% for pertanyaan in list_pertanyaan %}
-          <div class="col">
-            <div class="card">
-              <div class="card-body">
-              <h5 class="card-title">TESTINGGGGG{{pertanyaan.teks_pertanyaan}} </h5>
-              <form id="${res.pk}">
-                {% csrf_token %}
-                {{ form_jawaban|crispy }}
-              <div class="container text-center mt-3">
-                  <button type="button" class="btn btn-primary" onclick = 'submitAnswer("{{pertanyaan.pk}}")' id="submit-ans">Submit Answer</button>
-              </div>
-              </form>
-              </div>
-            </div>
-            <br>
-          </div>
-          {% endfor %}
+    <div class="container" id="header" style="padding:50px">
+      <center><div class="card judul-page">
+        <div class="card-body">
+          <h1 class="text-center" style="padding-inline:15px; padding-block:10px;">Frequently Asked Questions</h1>
         </div>
-      </div>
-      {% endif %} -->
+      </div></center>
 
-        <!-- {% if request.user.is_authenticated %} -->
-        <!-- {% for pertanyaan in list_pertanyaan %} -->
-      <!-- <div class="row row-cols-1 row-cols-md-3 g-4" style="margin:30px"> -->
-        <!-- <div id="display-pertanyaan"> -->
-        <!-- <div class="col">
-          <div class="card"> -->
-            <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
-            <!-- <div class="card-body">
-              <h5 class="card-title">{{pertanyaan.teks_pertanyaan}}</h5>
-              <form method="POST" action="{% url 'customer_service:add_jawaban' pertanyaan.pk %}">
-                {% csrf_token %}
-                {{ form_jawaban|crispy }}
-                <div class="container text-center mt-3">
-                  <button type="submit" class="btn btn-primary" id="submit-ans">Submit Answer</button>
-                </div>
-              </form>
-            </div> -->
-          <!-- </div>
-          <br>
-        </div> -->
-        <!-- {% endfor %} -->
-        <!-- </div>
-      </div> -->
-      <!-- {% endif %} -->
-      <!-- </div> -->
+      <div class="dropdown align-items-center">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Dropdown button
+        </button>
+
+        <ul class="dropdown-menu">
+          <li><button type="button" class="dropdown-item">Umum</button></li>
+          <li><button type="button" class="dropdown-item">Lelang</button></li>
+          <li><button type="button" class="dropdown-item">Galang</button></li>
+        </ul>
+      </div>
+
+
+    </div>
+      <div class="container" id="display-faq"></div>   
+    
 
       <div class="container" id="container-ending">
 
@@ -91,10 +55,9 @@
      
       
         {% elif request.user.is_authenticated and request.user.is_staff == False %}
-          <div class="move-page" style="padding:50px;">
-            <h2 class="text-center" styler="text-align:center">Still have any question?</h2><br>
-            <center><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="align-content:center; margin-bottom:100px">
-            Ask here!</button></center></div>
+          <div class="move-page" style="padding:25px;">
+            <center><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="align-content:center; margin:50px">
+            Tanya di sini!</button></center></div>
 
           <!-- MODAL -->
           <div class="modal fade" id="modalPertanyaan" tabindex="-1" aria-labelledby="modalPertanyaanLabel" aria-hidden="true">
@@ -116,7 +79,7 @@
                 
                 <div class="modal-footer">
                   <div class="container text-center mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="#modalPertanyaan" onclick="submitPertanyaan()" id="submitques">Submit Question</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="#modalPertanyaan" onclick="submitPertanyaan()" id="submit-ques">Submit Question</button>
                   </div>
                 </div>
                 </form>
@@ -130,7 +93,7 @@
         <div class="move-page" style="padding:50px;">
           <center><button type="button" class="btn btn-primary btn-lg">
             <a href="{% url 'general_user:login' %}" style="text-decoration: none; color: white;">
-            Login to ask a new question!
+            Login untuk mengirim pertanyaan!
           </a></button></center></div>
   
         {% endif %}

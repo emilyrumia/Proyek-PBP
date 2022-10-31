@@ -89,6 +89,15 @@
     width: 100%;
 }
 
+.btn {
+    box-shadow: rgba(88, 88, 88, 0.35) 2px 2px 2px;
+}
+
+.judul-page {
+    border-radius:100px; 
+    width:fit-content
+}
+
 /* #btn-answer {
     display: inline-block;
     width: 50%;

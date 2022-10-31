@@ -9,7 +9,7 @@ $(document).ready(displayPertanyaan())
 function submitPertanyaan() {
     // e.preventDefault();
     $.ajax({
-        url: "{% url 'customer_service:add_pertanyaan' %}",
+        url: "add-pertanyaan/",
         type: 'POST',
         data: { csrfmiddlewaretoken: '{{ csrf_token }}',
             'kategori': $('#kategori').val(),
@@ -76,14 +76,17 @@ function submitPertanyaan() {
           }
         }); 
         
-        $('#'+id)[0].reset();
+        $('#form-jawaban')[0].reset();
+        $("#modalJawaban").modal('hide');
+
       }
       // )})
 
 // Script untuk MENAMPILKAN FAQ
 function displayFAQ() {
 $.ajax({
-    url: "{% url 'customer_service:jsonFAQ' %}",
+    // url: "{% url 'customer_service:jsonFAQ' %}",
+    url: "json/faq",
     type: 'GET',
     dataType: 'json',
     success: function(res) {
@@ -163,50 +166,39 @@ $.ajax({
     }
 });
 }
+  // JQUERY BUAT GITUIN MODAL PLS BS DONG HUHU 
+  $(document).ready(function(){
+    const modalJawaban = document.getElementById('modalJawaban')
+    modalJawaban.addEventListener('show.bs.modal', event => {
 
-// // Script untuk MENAMPILKAN PERTANYAAN  
-// function displayPertanyaan() {
-// $.ajax({
-//     url: "{% url 'customer_service:jsonPertanyaan' %}",
-//     type: 'GET',
-//     dataType: 'json',
-//     success: function(res) {
-//         var htmlString = ""
-//         res.forEach((pertanyaan) => {
-//         htmlString += `<div class="col">
-//                         <div class="card">
-//                         <div class="card-header h5" style="vertical-align: middle;">
-//                             <strong> ${pertanyaan.fields.teks_pertanyaan} </strong></div>
-//                         <div class="card-body">
-                        
-//                         <form id="${pertanyaan.pk}">
-//                             {% csrf_token %}
-//                             {{ form_jawaban|crispy }}
-                            
+      // Button that triggered the modal
+      const button = event.relatedTarget
 
-//                         <div class="container text-center mt-3">
-//                             <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${pertanyaan.pk}")' id="submit-ans">Submit Answer</button>
-//                         </div>
-//                         </form>
-//                         </div>
-//                     </div>
-//                     <br>
-//                     </div>`
-        
-//         }); 
+      // Extract info from data-bs-* attributes
+      const id = button.getAttribute('data-bs-id')
+      const qs = button.getAttribute('data-bs-qs')
 
-//         $('#display-pertanyaan').html(htmlString)
-        
-//     }
-// });
+      // If necessary, you could initiate an AJAX request here
+      // and then do the updating in a callback.
+      // Change id of form-jawaban
+      let btn = document.getElementById('submit-ans')
+      btn.id = id
 
-// }
+      // Update the modal's content.
+      const modalTitle = modalJawaban.querySelector('.modal-title')
+      // const modalBody = modalJawaban.querySelector('.modal-body')
 
- // Script untuk MENAMPILKAN PERTANYAAN  
- function displayPertanyaan() {
+      modalTitle.textContent = qs
+
+    })
+  })
+
+  // Script untuk MENAMPILKAN PERTANYAAN  
+  function displayPertanyaan() {
     alert("displaypert")
     $.ajax({
-        url: "{% url 'customer_service:jsonPertanyaan' %}",
+        // url: "{% url 'customer_service:jsonPertanyaan' %}",
+        url: "json/pertanyaan",
         type: 'GET',
         dataType: 'json',
         success: function(res) {
@@ -217,10 +209,10 @@ $.ajax({
                             <div class="card-body">
                             <h5 class="card-title" style="padding:10px;">${pertanyaan.fields.teks_pertanyaan}</h5>
                             <div class="btn-toolbar w-100 container g-4 mt-3" style="padding:5px">
-                                <button type="button" class="btn btn-primary" id="btn-answer">
-                                  <a href="/customer_service/pertanyaan-masuk/jawab/${pertanyaan.pk}" style="text-decoration: none; color: white;">
-                                  Answer</a></button>
-                                <button type="button" class="btn btn-danger" onclick='deletePertanyaan("${pertanyaan.pk}")' id="btn-delete">Delete</button>
+                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalJawaban" 
+                                data-bs-id=${pertanyaan.pk} data-bs-qs="${pertanyaan.fields.teks_pertanyaan}">
+                                Answer</button>
+                              <button type="button" class="btn btn-danger" onclick='deletePertanyaan("${pertanyaan.pk}")' id="btn-delete">Delete</button>
                             </div>
                           </div>
                         </div>
@@ -228,9 +220,12 @@ $.ajax({
                       </div>`
           }); 
           $('#display-pertanyaan').html(htmlString)
+          alert("BERHASIL displaypert")
         }
     });
   }
+  
+
 
   function deletePertanyaan(id){ 
     $.ajax({
@@ -239,9 +234,14 @@ $.ajax({
         success: function(res){
             // $("#col-" + id).remove();
             alert("berhasil dihapus")
+            displayPertanyaan()
         }
     });
-}
+  }
+
+    // Displaying for the first time
+    $(document).ready(displayPertanyaan())
+    $(document).ready(displayFAQ())
 
 
 
