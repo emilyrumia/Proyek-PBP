@@ -4,5 +4,4 @@ from testimoni.models import TestimoniList
 class TestimoniForm(forms.ModelForm) :
     class Meta:
         model = TestimoniList
-        exclude = ['user']
-        fields = ['nama', 'title', 'pesan']
+        fields = ['nama', 'title', 'target', 'pesan']

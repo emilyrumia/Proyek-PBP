@@ -1,10 +1,10 @@
 import random
-from general_user.models import GeneralUser
 from testimoni.models import TestimoniList
+from testimoni.forms import TestimoniForm
 
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse
 from django.core import serializers
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -20,8 +20,11 @@ def show_testimoni(request) :
     second_random_testimoni = random_testimoni[1]
     third_random_testimoni = random_testimoni[2]
 
+    testimoni_form = TestimoniForm(request.POST)
+
     context = {
         'list_testimoni' : list_testimoni,
+        'testimoni_form' : testimoni_form,
         'first_random_testimoni' : first_random_testimoni,
         'second_random_testimoni' : second_random_testimoni,
         'third_random_testimoni' : third_random_testimoni
@@ -44,21 +47,13 @@ def show_random_testimoni(request):
 # Method untuk menambahkan testimoni (dibutuhkan login akun)
 @login_required(login_url='/login')
 def add_testimoni(request) :
-    if request.method == "POST" :
-        user_logged_in = GeneralUser.objects.get(user=request.user)
-        nama = request.POST.get("nama")
-        title = request.POST.get("title")
-        target = request.POST.get("target")
-        pesan = request.POST.get("pesan")
 
-        if len(nama) == 0 :
-            nama = "Anonymous"
+    nama = request.POST.get("nama")
+    title = request.POST.get("title")
+    target = request.POST.get("target")
+    pesan = request.POST.get("pesan")
 
-        if len(target) == 0 :
-            target = "-"
+    testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
+    testimoni_baru.save()
 
-        testimoni_baru = TestimoniList(user=user_logged_in, nama=nama, title=title, target=target, pesan=pesan)
-        testimoni_baru.save()
-
-        return redirect("testimoni:show_testimoni")
-    return HttpResponseNotFound()
+    return HttpResponse(status=200)
