@@ -1,0 +1,103 @@
+/* FAQ HTML */
+/* Break buat apa gatau jg lupaaa */
+.break {
+    display: block;
+    padding: 5px;
+}
+
+/* Things about FAQ's accordions */
+.icon::before {
+    display: inline-block;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+.accordion {
+    /* background-color: rgb(37, 111, 171) ; */
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    transition: 0.4s;
+    box-shadow: rgba(26, 26, 26, 0.35) 0px 5px 10px;
+}
+
+.umum {
+    background-color: #4682B4 ;
+}
+
+.umum.active, .umum:hover {
+    background-color: #296aa0 ;
+}
+
+.lelang {
+    background-color: #ebb63a;
+}
+
+.lelang.active, .lelang:hover {
+    background-color: #d39a14;
+}
+
+.galang {
+    background-color: #20B2AA;
+}
+
+.galang.active, .galang:hover {
+    background-color: #16928b;
+}
+
+.panel {
+    padding: 0 18px;
+    background-color: rgb(217, 219, 221);
+    color:rgb(31, 31, 31);
+    max-height: 0;
+    border: 0.5rem;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    box-shadow: rgba(26, 26, 26, 0.35) 0px 5px 10px;
+}
+
+.accordion:after {
+    font: var(--fa-font-solid);
+    content: '\f078'; 
+    color:rgb(255, 255, 255);
+    font-size: 18px;
+    float: right;
+    margin-left: 5px;
+}
+
+.accordion.active:after { 
+    font: var(--fa-font-solid); 
+    font-size: 18px;
+    content: '\f077' ;
+    color:rgb(255, 255, 255);
+}
+
+/* PERTANYAAN MASUK HTML (msh ccd) */ 
+.card {
+    box-shadow: rgba(27, 27, 27, 0.35) 0px 5px 15px;
+}
+
+.card:hover {
+    box-shadow: rgba(27, 27, 27, 0.35) 0px 5px 15px;
+}
+
+.btn-toolbar {
+    display: block;
+    width: 100%;
+}
+
+/* #btn-answer {
+    display: inline-block;
+    width: 50%;
+}
+
+#btn-delete {
+    display: inline-block;
+    width: 50%;
+} */
+
+/* JAWAB HTML (msh ccd jg) */
+/* blm ada nambah apa2 sih di sini */
