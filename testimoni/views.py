@@ -14,12 +14,14 @@ def show_testimoni(request) :
     # Menampilkan semua testimoni (maupun bagi yang belum login)
     list_testimoni = TestimoniList.objects.all()
 
+    # Mengambil 3 testimoni secara acak untuk ditambahkan ke carousel
     initiate_list_testimoni = list(TestimoniList.objects.all()) 
     random_testimoni = random.sample(initiate_list_testimoni, 3)
     first_random_testimoni = random_testimoni[0]
     second_random_testimoni = random_testimoni[1]
     third_random_testimoni = random_testimoni[2]
 
+    # Membuat tampilan form
     testimoni_form = TestimoniForm(request.POST)
 
     context = {
@@ -37,7 +39,7 @@ def show_testimoni_json(request):
     list_testimoni = TestimoniList.objects.all()
     return HttpResponse(serializers.serialize('json', list_testimoni), content_type="application/json")
 
-
+# Method untuk menampilkan data acak testimoni dengan format json
 def show_random_testimoni(request):
     list_testimoni = list(TestimoniList.objects.all())
     random_testimoni = random.sample(list_testimoni, 3)
