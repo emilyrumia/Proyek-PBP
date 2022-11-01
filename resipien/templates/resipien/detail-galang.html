@@ -1,42 +1,158 @@
 {% extends 'base_nav_user.html' %}
-
 {% load static %}
-
 {% block meta %}
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link rel="stylesheet" href="{% static 'css/resipien.css' %}">
 
 <title>Buat Galang Dana</title>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 <style>
 
-  #btn-komen {
-    background-color: #d28542;
+
+  #container-detail {
+    position: relative;
+    background-color: white;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 3px 3px 0 rgba(0, 0, 0, 0.24);
+    padding: 6%;
+    border-radius: 10px;
+    margin: 2%;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-bottom: 3%;
+}
+
+  #container-data {
+      width: 70%;
+      padding: 2% 0 2%;
+      margin: auto;
+      text-align: center;
   }
+
+  #container-gambar {
+      padding: 5%;
+      width: 50%;
+      margin: 4%;
+      justify-content: center;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  #btn-back {
+    background-color: green;
+    color:white;
+    float: right;
+  }
+
+  #btn-komen {
+    background-color: green;
+    color:white;
+  }
+
+  .detail {
+    text-align: center;
+  }
+
+  .rekening {
+    /* background-image: linear-gradient(to right, green, #ced2ba); */
+    background-color: green;
+    /* background: linear-gradient(75.7deg, rgb(34, 126, 34) 3.8%, rgb(99, 162, 17) 87.1%); */
+  }
+
+  .comment {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+  #container-comment {
+    width: 50%;
+  }
+
+  #img-user {
+    width: 25px;
+    height: 25px;
+  }
+  
+  #span-user {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+ 
+
 
 </style>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
 
-function submitKomentar(id) {
-  $.ajax({
+  const url = ""
+
+  function showKomentar() {
+    $.ajax({
+      type: "GET",
+      url: url ,
+      data: {csrfmiddlewaretoken: "{{ csrf_token }}"},
+      dataType: "json",
+      success: function (data) {
+        console.log(data)
+        show(data)
+        document.getElementById("btn-komen").style.display = "none"
+        document.getElementById("container-komen").style.display = "block"
+      }
+    })
+  }
+
+  function addKomentar() {
+    console.log($("#id_komentar").val())
+    $.ajax({
       type: "POST",
-      url: "{% url 'resipien:add-komentar' id %}",
+      url : url,
       data: {
-        csrfmiddlewaretoken: "{{ csrf_token }}", 
-        komen: $("#komen").val(),
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+        komen : $("#id_komentar").val()
       },
-        dataType: "json",
-        success: function () {
-        refresh();
-        document.getElementById("komentar").value = "";
+      dataType: "json",
+      success: function (data) {
+        console.log(data)
+        console.log("success buat komentar")
+        showKomentar()
       },
+      error: function (error) {
+        console.log("error")
+      }
+    })
+  }
+
+  function show(data) {
+    let comments= ``;
+
+    for (let i of data) {
+      comments += `
+                <br>
+                <div style="border-bottom:1px solid rgb(202, 200, 200);">
+                    <br>
+                      <span id="span-user"><img id="img-user" src="{% static 'images/profile.png' %}" style="max-height:300px">
+                        <h5>&nbsp;${i.fields.username}</h5></span>
+                      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${i.fields.komentar}</p>
+                      <p style="text-align:end">${i.fields.tanggal_komentar}</p>
+                </div>
+              `
+    }
+    
+    document.getElementById("show-komentar").innerHTML = comments;
+  }
+
+  $(document).ready(function () {
+
+    showKomentar()
+
   });
-}
+
 
 </script>
 
@@ -46,33 +162,148 @@ function submitKomentar(id) {
 {% block content %}
 
 {% load crispy_forms_tags %}
-
-<div id="container-detail">
-  <div id="container-data">
-    <div id="container-gambar">
-      {% if galang.gambar %}
-        <img id="img-detail" src="{{ galang.gambar.url}}" style="max-height:300px">
-      {% else %}
-        <img id="img-detail" src="{% static 'images/noimage.jpeg' %}" style="max-height:300px">
-      {% endif %}
+<div id="cerita" class="cerita section">
+  <br></br>
+  <div class="container">
+    <a class="btn" id="btn-back" type="button" href="{% url 'resipien:daftar' %}">Kembali</a>
+    <h2>{{galang.judul}}</h2><br>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="about-left-image  wow fadeInLeft">
+              {% if galang.gambar %}
+                <img id="img-detail" src="{{ galang.gambar.url }}" style="max-width:700px; max-height:400px">
+              {% else %}
+                <img id="img-detail" src="{% static 'images/noimage.jpeg' %}" style="max-height:300px">
+              {% endif %}
+            </div>
+            <br>
+            <progress class="progress-bar bg-success rounded" value = "{{ galang.terkumpul }}" max = "{{ galang.target }}" style="width: 100%"></progress>
+            <span id="terkumpul" ><strong style="color:green; font-size: 30px;">Rp. {{ galang.terkumpul }}</strong><strong style="font-size: 18px;"> &nbsp;terkumpul dari Rp. {{ galang.target }}</strong></span>
+          </div>
+          <div class="col-lg-6 align-self-center  wow fadeInRight">
+            <div class="about-right-content">
+              <div class="section-heading">
+                {% if galang.tujuan == "Pribadi" %}
+                  <h6 ><span style="background-color: orange;">#SayaButuhBantuan</span></h6>
+                {% else %}
+                  <h6 ><span style="background-color: orange;">#{{galang.tujuan}}ButuhBantuan</span></h6>
+                {% endif %}
+                <h4>Cerita {{galang.user.user.username}}</h4>
+              </div>
+              <p>{{galang.deskripsi}}</p>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <h1 id="judul-galang">{{galang.judul}}</h1>
-    <p>{{galang.deskripsi}}</p>
-    <p>{{galang.target}}</p>
-    <p>{{galang.judul}}</p>
-    <form id="formK" method="POST" >
-      {% csrf_token %}
-      <textarea id="komen" rows="7" cols="80" placeholder="Tulis komentar..."></textarea>
-      <a role="button"id="btn-komen" class="btn" onclick="submitKomentar('{{galang.id}}')" >Tambah Komentar</a>
-    </form>
-    
-    <div id="komentar"></div>
-    {% for komentar in komen %}
-      <h4>{{komentar.user.username}}</h4>
-      <p>{{komentar.komentar}}</p>
-    {% endfor %}
-
   </div>
-</div>
+
+  <div id="services" class="services section">
+    <div class="container">
+      <div class="row">
+        <div id="featured-3" class="container px-4 py-5">
+          <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div id="card-fitur" class="feature col">
+              <div class="icon-fitur">
+                <i class='far fa-calendar-check' style='font-size:90px;  color:green'></i>
+              </div>
+              <br>
+              <h2>Tanggal Pembuatan</h2>
+              <br>
+              <h4>{{galang.tanggal_pembuatan}}</h4>
+            </div>
+            <div id="card-fitur" class="feature col">
+              <div class="icon-fitur">
+                <i class='far fa-calendar-times' style='font-size:90px; color:green'></i>
+              </div>
+              <br>
+              <h2>Tanggal Berakhir</h2>
+              <br>
+              <h4>{{galang.tanggal_berakhir}}</h4>
+            </div>
+            <div id="card-fitur" class="feature col">
+              <div class="icon-fitur">
+                <i class='fas fa-hourglass-half' style='font-size:90px; color:green'></i>
+              </div>
+              <br>
+              <h2>Sisa Waktu</h2>
+              <br>
+              {% if galang.status_keaktifan %}
+                <h4>{{ galang.tanggal_berakhir|timeuntil }}</h4>
+              {% else %}
+                <h4 style="color:red">Sudah Habis</h4>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if request.user.is_authenticated and galang.status_keaktifan %}
+  <div id="comment" class="comment section">
+    <div class="container"></div>
+      <div class="container-comment">
+        <div id="container-komen">
+          <div style="border-bottom:1px solid rgb(202, 200, 200);"><h3 style="text-align:center;">KOLOM KOMENTAR</h3></div>
+          <br>
+          <form method="POST" id="formKomen">
+            {% csrf_token %}
+            {{formKomentar|crispy}}
+          </form>
+          <button id="btn-add" type="submit" onclick="addKomentar()">Submit</button>
+        </div>
+        <div id="show-komentar" ></div>
+        <br></br>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+
+  <div id="rekening" class="rekening section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <br></br>
+          <div class="section-heading detail fadeInDown">
+            {% if galang.status_keaktifan %}
+              <h4 style="color: white;">MASIH BUTUH BANTUANMU!</h4>
+            {% else %}
+              <h4 style="color: white;">TERIMA KASIH ATAS BANTUANYA!</h4>
+            {% endif %}
+          </div>
+          <div id="container-detail">
+            <h5>Anda masih ingin membantu, bisa langsung ke</h5>
+            <h2>Rekening Tujuan</h2>
+            <div style="border-bottom:1px solid rgb(202, 200, 200);">
+              <div class="d-flex justify-content-between">
+                <span>Nama Pemilik: </span>
+                <h6>{{galang.akun_bank.nama_pemilik}}</h6>
+              </div>
+            </div>
+          <br>
+              <div style="border-bottom:1px solid rgb(202, 200, 200);">
+                <div class="d-flex justify-content-between">
+                <span>Bank: </span>
+                  <h6>{{galang.akun_bank.nama_bank}}</h6>
+                </div>
+              </div>
+          <br>
+            <div style="border-bottom:1px solid rgb(202, 200, 200);">
+              <div class="d-flex justify-content-between">
+                <span>No Rekening: </span>
+                <h6>{{galang.akun_bank.no_rekening}}</h6>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   
 {% endblock content %}

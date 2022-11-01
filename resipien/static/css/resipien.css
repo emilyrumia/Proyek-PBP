@@ -1,6 +1,5 @@
 /* all */
 
-
 /* buat-galang.html */
 
 .form-galang {
@@ -29,7 +28,7 @@
     width: 100%;
     height: 45px;
     text-align: center;
-    background-color: #fcc46c;
+    background-color: green;
 }
 
 /* galang-dana.html */
@@ -65,7 +64,8 @@
 }
  
 #btn-detail {
-    background-color: #fcc46c;
+    background-color: green;
+    color: white;
 }
 
 #img-detail {
@@ -103,7 +103,3 @@
     text-align: center;
 }
 
-#btn-komen {
-    width: 50%;
-
-}
