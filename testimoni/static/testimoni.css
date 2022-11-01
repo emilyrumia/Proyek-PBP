@@ -65,8 +65,23 @@
     margin : 10px auto;
 }
 
-.card-body{
-    background: transparent;
+.card{
+    margin: 10px auto;
+    border-radius: 1rem;
+    border: 1px solid transparent;
+    backdrop-filter: blur(1rem);
+    box-shadow: 1rem 1rem 1rem rgba(0,0,0, 0.5);
+    background-color: rgba(0,0,0, 0.15);
+    border-top-color: rgba(225,225,225, 0.5);
+    border-left-color: rgba(225,225,225, 0.5);
+    border-bottom-color: rgba(225,225,225, 0.1);
+    border-right-color: rgba(225,225,225, 0.1);
+}
+
+#list{
+    margin: 5px auto;
+    border-radius: 10px;
+    border: 1px solid transparent;
 }
 
 .card_nama{

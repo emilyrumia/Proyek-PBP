@@ -53,6 +53,12 @@ def add_testimoni(request) :
     target = request.POST.get("target")
     pesan = request.POST.get("pesan")
 
+    if len(nama) == 0 :
+        nama = "Anonymous"
+        
+    if len(target) == 0 :
+        target = "-"
+
     testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
     testimoni_baru.save()
 
