@@ -5,10 +5,91 @@
 {% endblock meta %}
 
 {% block content %}
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadData();
+            $('#myGalang').click(function(){
+                $.get(`/general_user/galang/json`, function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $(`#grid_card`).append(card(data[i]));
+                    }
+                });
+            })
+            $('#myLelang').click(function(){
+                $.get(`/general_user/lelang/json`, function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $(`#grid_card`).append(card(data[i]));
+                    }
+                });
+            })
+        });
+
+        function deleteCard(id) {
+            $.ajax({
+                url: `/todolist/delete/${id}`,
+                type: 'DELETE',
+                success: function (result) {
+                    $(`#task-${id}`).remove()
+                }
+            });
+        }
+
+        function updateCard(id) {
+            $.ajax({
+                url: `/todolist/update/${id}`,
+                type: 'PATCH',
+                success: function (data) {
+                    $(`#task-${id}`).empty()
+                    $(`#task-${id}`).append(
+                      `<div class="rounded overflow-hidden shadow-lg">
+                        <div class="font-bold text-xl mb-2">${data.fields.title}</div>
+                        <div class="font-semibold text-sm mb-2">${data.fields.date}</div>
+                        <p class="text-gray-700 text-base">${data.fields.description}</p>
+                        <div class="font-semibold text-sm mb-2">{% if data.fields.is_finished %} Selesai {% else %} Belum Selesai {% endif %}</div>
+                        <button onclick="updateCard(${data.pk})">Update Task</a></button>
+                        <button onclick="deleteCard(${data.pk})">Delete Task</a></button>
+                      </div>`
+                    )
+                }
+            });
+        }
+
+        const card = (data) =>
+        `<div class="max-w-sm" id="task-${data.pk}>
+            <div class="rounded overflow-hidden shadow-lg">
+              <div class="font-bold text-xl mb-2">${data.fields.title}</div>
+              <div class="font-semibold text-sm mb-2">${data.fields.date}</div>
+              <p class="text-gray-700 text-base">${data.fields.description}</p>
+              <div class="font-semibold text-sm mb-2">{% if data.fields.is_finished %} Selesai {% else %} Belum Selesai {% endif %}</div>
+              <button id="update" onclick="updateCard(${data.pk})">Update Task</a></button>
+              <button id="delete" onclick="deleteCardCard(${data.pk})">Delete Task</a></button>
+            </div>
+          </div>`
+
+        function loadData() {
+            $.get(`/todolist/json`, function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $(`#grid_card`).append(card(data[i]));
+                }
+            });
+        }
+    </script>
+</head>
 <div class="container-fluid">
     <div class="d-flex flex-column justify-content-center align-items-center vh-100">
         {% if request.user.is_authenticated %}
         <h1 class="text-center">Hello {{ request.user.first_name }}</h1>
+        <button type="button" class="btn btn-primary" id="myLelang">Show My Lelang</button>
+        <button type="button" class="btn btn-primary" id="myGalang">Show My Donation</button>
+        
+        <div class="card" style="width: 90%; margin-top: 20px;">
+            <div class="card-body">
+                <div class="grid gap-4 grid-cols-1 sm:grid-flow-cols-1 md:grid-cols-3 lg:grid-cols-4 m-4" id="grid_card">
+                </div>
+            </div>
+        </div>
         {% else %}
         <h1 class="text-center">Hello world</h1>
         <button type="button" class="btn btn-primary"><a href="{% url 'general_user:register' %}" style="text-decoration: none; color: white;">Sign-Up Now</a></button>
