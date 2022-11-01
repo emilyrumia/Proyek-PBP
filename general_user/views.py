@@ -5,12 +5,21 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.core import serializers
 from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
+from resipien.models import GalangDana
+from lelang.models import BarangLelang
 # Create your views here.
 
 def homepage(request):
-    return render(request, "general_user/home.html")
+    data_lelang = BarangLelang.objects.filter(pelelang=request.user)
+    data_galang = GalangDana.objects.filter(user=request.user)
+    context = {
+        'data_lelang':data_lelang,
+        'data_galang':data_galang
+    }
+    return render(request, "general_user/home.html", context)
 
 def login_user(request):
     if request.method == "POST":
@@ -52,3 +61,13 @@ def register(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('general_user:homepage'))
+
+@login_required(login_url='/todolist/login')
+def show_json_lelang(request):
+    data = BarangLelang.objects.filter(pelelang=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+@login_required(login_url='/todolist/login')
+def show_json_galang(request):
+    data = GalangDana.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
