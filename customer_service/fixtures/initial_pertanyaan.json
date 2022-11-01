@@ -1,0 +1,56 @@
+[
+    {
+        "model": "customer_service.pertanyaan",
+        "pk": 1,
+        "fields": {
+            "kategori": "UMUM",
+            "teks_pertanyaan": "Apakah aplikasi bidCare tersedia dalam bentuk mobile app?",
+            "is_answered": true
+        }
+    },
+    {
+        "model": "customer_service.pertanyaan",
+        "pk": 2,
+        "fields": {
+            "kategori": "UMUM",
+            "teks_pertanyaan": "Apakah harus mempunyai akun untuk mengikuti kegiatan lelang dan donasi pada bidCare?",
+            "is_answered": true
+        }
+    },
+    {
+        "model": "customer_service.pertanyaan",
+        "pk": 3,
+        "fields": {
+            "kategori": "LELANG",
+            "teks_pertanyaan": "Apa itu lelang?",
+            "is_answered": true
+        }
+    },
+    {
+        "model": "customer_service.pertanyaan",
+        "pk": 4,
+        "fields": {
+            "kategori": "LELANG",
+            "teks_pertanyaan": "Apakah harga lelangnya memiliki batas maksimal penawaran?",
+            "is_answered": true
+        }
+    },
+    {
+        "model": "customer_service.pertanyaan",
+        "pk": 5,
+        "fields": {
+            "kategori": "GALANG",
+            "teks_pertanyaan": "Apakah resipien dapat menetapkan target nominal dana yang ia butuhkan?",
+            "is_answered": true
+        }
+    },
+    {
+        "model": "customer_service.pertanyaan",
+        "pk": 6,
+        "fields": {
+            "kategori": "GALANG",
+            "teks_pertanyaan": "Apakah resipien dapat mengajukan galang dana lebih dari satu kali?",
+            "is_answered": true
+        }
+    }
+]

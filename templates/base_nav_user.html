@@ -14,6 +14,15 @@
   {% endblock meta %}
 </head>
 
+<!-- <style>
+  #nav-bar {
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    z-index: 9999;
+  }
+</style> -->
+
 <body>
   {% comment %} Bootstrap navbar {% endcomment %}
   <nav class="navbar navbar-expand-lg navbar-light bg-light py-3" id="nav-bar">
@@ -31,15 +40,18 @@
             <a class="nav-link" href="#">Lihat Lelang</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#">Lihat Galang Dana</a>
+              <a class="nav-link" href="{% url 'resipien:daftar' %}">Lihat Galang Dana</a>
           </li>
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="#">Buat Penggalangan Dana</a>
+            <a class="nav-link" href="{% url 'resipien:buat' %}">Buat Penggalangan Dana</a>
           </li>
           {% endif %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'testimoni:tampilan_testimoni' %}">Testimoni</a>
+            <a class="nav-link" href="{% url 'testimoni:show_testimoni' %}">Testimoni</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'customer_service:show_faq' %}">FAQ</a>
           </li>
         </ul>
       </div>
@@ -55,9 +67,9 @@
                   <li><a class="dropdown-item" href="{% url 'general_user:logout' %}">Logout</a></li>
               </ul>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Customer Service</a>
-            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{% url 'customer_service:show_faq' %}">Customer Service</a>
+            </li> -->
           {% else %}
           <li class="nav-item">
             <a class="nav-link active px-3 ms-2 text-light" href="{% url 'general_user:login' %}">Login</a>
