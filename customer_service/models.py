@@ -27,9 +27,6 @@ class Pertanyaan(models.Model):
     def __str__(self):
         return self.teks_pertanyaan
 
-    # class Meta:
-    #     unique_together = [['kategori', 'teks_pertanyaan']]
-
     def natural_key(self):
         return (self.kategori, self.teks_pertanyaan)
 
