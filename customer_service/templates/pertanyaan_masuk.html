@@ -42,10 +42,10 @@
               {% csrf_token %}
               {{ form_jawaban|crispy }}
             
-            <div class="modal-footer">
-              <div class="container text-center mt-3">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="#modalJawaban" onclick="submitAnswer(this.id)" id="submit-ans">Submit Answer</button>
-              </div>
+            
+            <div class="container text-center mt-3">
+              <button type="button" class="btn btn-success" data-bs-dismiss="#modalJawaban" onclick="submitAnswer(this.id)" id="submit-ans">Submit Answer</button>
+            
             </div>
             </form>
             
@@ -60,7 +60,7 @@
       </div>
 
       <div class="move-page" style="padding:50px;">
-        <center><button type="button" class="btn btn-primary btn-lg">
+        <center><button type="button" class="btn btn-success btn-lg">
           <a href="{% url 'customer_service:show_faq' %}" style="text-decoration: none; color: white;">
         Kembali ke halaman FAQ
       </a></button></center>

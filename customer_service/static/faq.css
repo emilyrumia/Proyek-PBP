@@ -1,5 +1,5 @@
 /* FAQ HTML */
-/* Break buat apa gatau jg lupaaa */
+
 .break {
     display: block;
     padding: 5px;
@@ -13,7 +13,6 @@
 }
 
 .accordion {
-    /* background-color: rgb(37, 111, 171) ; */
     color: rgb(255, 255, 255);
     cursor: pointer;
     padding: 18px;
@@ -25,27 +24,27 @@
 }
 
 .umum {
-    background-color: #4682B4 ;
+    background-color: #478974;
 }
 
 .umum.active, .umum:hover {
-    background-color: #296aa0 ;
+    background-color: #207a5e;
 }
 
 .lelang {
-    background-color: #ebb63a;
+    background-color: #70d49b;
 }
 
 .lelang.active, .lelang:hover {
-    background-color: #d39a14;
+    background-color: #42c37a;
 }
 
 .galang {
-    background-color: #20B2AA;
+    background-color:#21ab89;
 }
 
 .galang.active, .galang:hover {
-    background-color: #16928b;
+    background-color:#0e906f;
 }
 
 .panel {
@@ -95,7 +94,12 @@
 
 .judul-page {
     border-radius:100px; 
-    width:fit-content
+    width:fit-content;
+    border:rgb(77, 162, 105);
+}
+
+.btn-ijo {
+    background-color: rgb(77, 162, 105);
 }
 
 /* #btn-answer {

@@ -50,7 +50,7 @@
 
         {% if request.user.is_authenticated and request.user.is_staff %}
           <div class="move-page" style="padding:50px;">
-          <center><button type="button" class="btn btn-primary btn-lg">
+          <center><button type="button" class="btn btn-success btn-lg">
             <a href="{% url 'customer_service:pertanyaan_masuk' %}" style="text-decoration: none; color: white;">
             Klik untuk menjawab pertanyaan-pertanyaan yang masuk!
           </a></button></center></div>
@@ -58,7 +58,7 @@
       
         {% elif request.user.is_authenticated and request.user.is_staff == False %}
           <div class="move-page" style="padding:25px;">
-            <center><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="align-content:center; margin:50px">
+            <center><button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="align-content:center; margin:50px">
             Tanya di sini!</button></center></div>
 
           <!-- MODAL -->
@@ -75,10 +75,9 @@
                   {% csrf_token %}
                   {{ form_pertanyaan|crispy }}
                 
-                <div class="modal-footer">
-                  <div class="container text-center mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="#modalPertanyaan" onclick="submitPertanyaan()" id="submit-ques">Submit Question</button>
-                  </div>
+                <div class="container text-center mt-3">
+                  <button type="button" class="btn btn-success" data-bs-dismiss="#modalPertanyaan" onclick="submitPertanyaan()" id="submit-ques">Submit Question</button>
+                  
                 </div>
                 </form>
                 
@@ -89,7 +88,7 @@
 
         {% else %}
         <div class="move-page" style="padding:50px;">
-          <center><button type="button" class="btn btn-primary btn-lg">
+          <center><button type="button" class="btn btn-success btn-lg">
             <a href="{% url 'general_user:login' %}" style="text-decoration: none; color: white;">
             Login untuk mengirim pertanyaan!
           </a></button></center></div>

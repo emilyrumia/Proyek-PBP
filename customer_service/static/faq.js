@@ -21,7 +21,7 @@ function submitPertanyaan() {
                       {% csrf_token %}
                       {{ form_jawaban|crispy }}
                   <div class="container text-center mt-3">
-                      <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${res.pk}")' id="submit-ans">Submit Answer</button>
+                      <button type="button" class="btn btn-success" onclick = 'submitAnswer("${res.pk}")' id="submit-ans">Submit Answer</button>
                   </div>
                   </form>
                   </div>
@@ -155,7 +155,7 @@ function displayPertanyaan() {
                           <div class="card-body">
                           <h5 class="card-title" style="padding:10px;">${pertanyaan.fields.teks_pertanyaan}</h5>
                           <div class="btn-toolbar w-100 container g-4 mt-3" style="padding:5px">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalJawaban" 
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalJawaban" 
                               data-bs-id=${pertanyaan.pk} data-bs-qs="${pertanyaan.fields.teks_pertanyaan}">
                               Answer</button>
                             <button type="button" class="btn btn-danger" onclick='deletePertanyaan("${pertanyaan.pk}")' id="btn-delete">Delete</button>
