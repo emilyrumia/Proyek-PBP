@@ -1,0 +1,40 @@
+{% extends 'base_nav_user.html' %}
+
+{% block meta %}
+<title>Buat Lelang Baru</title>
+{% endblock meta %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+<div class="container mt-3">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <h1 class="text-center">Buat Lelang Baru</h1>
+        <form method="POST" enctype="multipart/form-data" style="width:60%">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="container text-center mt-3">
+                <button type="button" formnovalidate class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Buat Lelang</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="confirmation-bid-modal">
+                            <p>Perhatikan bahwa <strong>70%</strong> dari hasil jual barang lelang ini akan disumbangkan kepada galang dana tujuan, yaitu <strong>{{galang_dana_tujuan.user.user.first_name}} {{galang_dana.user.user.first_name}}</strong> dengan tajuk <strong>"{{galang_dana.judul}}"</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Konfirmasi</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Tidak</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

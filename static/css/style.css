@@ -1,10 +1,10 @@
 body{
-    background-color: rgb(192, 244, 226);
     font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
 }
 
 .bg-primary {
-    background-color: cadetblue !important;
+    background-color: white!important;
 }
 
 #nav-bar{
