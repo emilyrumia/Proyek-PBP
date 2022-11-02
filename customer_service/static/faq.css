@@ -1,5 +1,5 @@
 /* FAQ HTML */
-
+/* Break buat apa gatau jg lupaaa */
 .break {
     display: block;
     padding: 5px;
@@ -13,6 +13,7 @@
 }
 
 .accordion {
+    /* background-color: rgb(37, 111, 171) ; */
     color: rgb(255, 255, 255);
     cursor: pointer;
     padding: 18px;
@@ -24,27 +25,27 @@
 }
 
 .umum {
-    background-color: #478974;
+    background-color: #4682B4 ;
 }
 
 .umum.active, .umum:hover {
-    background-color: #207a5e;
+    background-color: #296aa0 ;
 }
 
 .lelang {
-    background-color: #70d49b;
+    background-color: #ebb63a;
 }
 
 .lelang.active, .lelang:hover {
-    background-color: #42c37a;
+    background-color: #d39a14;
 }
 
 .galang {
-    background-color:#21ab89;
+    background-color: #20B2AA;
 }
 
 .galang.active, .galang:hover {
-    background-color:#0e906f;
+    background-color: #16928b;
 }
 
 .panel {
@@ -94,12 +95,7 @@
 
 .judul-page {
     border-radius:100px; 
-    width:fit-content;
-    border:rgb(77, 162, 105);
-}
-
-.btn-ijo {
-    background-color: rgb(77, 162, 105);
+    width:fit-content
 }
 
 /* #btn-answer {
@@ -111,3 +107,6 @@
     display: inline-block;
     width: 50%;
 } */
+
+/* JAWAB HTML (msh ccd jg) */
+/* blm ada nambah apa2 sih di sini */
