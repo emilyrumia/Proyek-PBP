@@ -147,13 +147,6 @@ for directory in [*STATICFILES_DIRS, STATIC_ROOT]:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AWS_ACCESS_KEY_ID = 'AKIAXBFQSZP4QLS2GZ7F'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'tk-pbp-bidcare'
-AWS_QUERYSTRING_AUTH = False
-
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

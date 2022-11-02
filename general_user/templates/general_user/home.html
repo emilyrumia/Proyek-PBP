@@ -2,20 +2,259 @@
 
 {% block meta %}
 <title>Homepage</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 {% endblock meta %}
 
 {% block content %}
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myGalang').click(function(){
+                $.get(`/galang/json`, function(data) {
+                    $(`#grid_card`).html(``);
+                    for (var i = 0; i < data.length; i++) {
+                        $(`#grid_card`).append(card_galang(data[i]));
+                    }
+                });
+            })
+            $('#myLelang').click(function(){
+                $.get(`/lelang/json`, function(data) {
+                    $(`#grid_card`).html(``);
+                    for (var i = 0; i < data.length; i++) {
+                        $(`#grid_card`).append(card_lelang(data[i]));
+                    }
+                });
+            })
+        });
+        function detailGalang(id) {
+            $.ajax({
+                url: `/galang/${id}`,
+                type: 'GET',
+                success: function(data){
+                    $(`#isi`).html(
+                `<div class="modal-header">
+          <h5 class="modal-title fw-bold fs-2" id="staticBackdropLabel">${data.fields.judul}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img style="width:200px; height: auto;"alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png">
+            <div class="fw-bold">Deskripsi</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.deskripsi}</div>
+            <div class="fw-bold">Tujuan</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
+            <div class="fw-bold">Tanggal Pembuatan</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.tanggal_pembuatan}</div>
+            <div class="fw-bold">Tanggal Berakhir</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.tanggal_berakhir}</div>
+            <div class="fw-bold">Terkumpul</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.terkumpul}</div>
+            <div class="fw-bold">Target</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.target}</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>`);
+                    $("#lelang-").modal('show');
+                }
+            })
+        }
+        function detailLelang(id) {
+            $.ajax({
+                url: `/lelang/${id}`,
+                type: 'GET',
+                success: function(data){
+                    $(`#isi`).html(
+                `<div class="modal-header">
+            <h5 class="modal-title fw-bold fs-2" id="staticBackdropLabel">${data.fields.nama_barang}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img style="width:200px; height: auto;"alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png">
+            <div class="fw-bold">Deskripsi</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.deskripsi}</div>
+            <div class="fw-bold">Kategori Barang</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.kategori_barang}</div>
+            <div class="fw-bold">Starting Bid</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.starting_bid}</div>
+            <div class="fw-bold">Highest Bid</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.bid_tertinggi}</div>
+            <div class="fw-bold">Tanggal Mulai</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.tanggal_mulai}</div>
+            <div class="fw-bold">Tanggal Berakhir</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.tanggal_berakhir}</div>
+            <div class="fw-bold">Status</div>
+            <div class="font-semibold text-sm mb-2">${data.fields.status_keaktifan}</div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>`);
+                    $("#galang-").modal('show');
+                }
+            })
+        }
+        const card_lelang = (data) =>
+        `<div class="max-w-sm" style="width: 300px" id="lelang-${data.pk}">
+            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                <div class="fw-bold fs-4" style="margin-bottom: 20px;">${data.fields.nama_barang}</div>
+                <div class="fw-bold">Deskripsi</div>
+                <div class="fw-normal">${data.fields.deskripsi}</div>
+                <div class="fw-bold">Kategori Barang</div>
+                <div class="fw-normal">${data.fields.kategori_barang}</div>
+                <div class="fw-bold">Bid Tertinggi</div>
+                <div class="fw-normal">${data.fields.bid_tertinggi}</div>
+                <div class="fw-bold">Status</div>
+                <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                <button type="button" class="btn btn-primary" onclick="detailGalang(${data.pk})">Detail</button>
+            </div>
+        </div>`
+        
+        const card_galang = (data) =>
+        `<div class="max-w-sm" style="width: 300px" id="galang-${data.pk}">
+            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                <div class="fw-bold fs-3" style="margin-bottom: 20px;">${data.fields.judul}</div>
+                <div class="fw-bold">Tujuan</div>
+                <div class="fw-normal">${data.fields.tujuan}</div>
+                <div class="fw-bold">Deskripsi</div>
+                <p class="text-gray-700 text-base">${data.fields.deskripsi}</p>
+                <div class="fw-bold">Status</div>
+                <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                <button type="button" class="btn btn-primary" onclick="detailGalang(${data.pk})">Detail</button>
+            </div>
+        </div>`
+    </script>
+</head>
 <div class="container-fluid">
-    <div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <div class="d-flex flex-column align-items-center vh-100">
         {% if request.user.is_authenticated %}
-        <h1 class="text-center">Hello {{ request.user.first_name }}</h1>
-        {% comment "lelangcreatelelang" %}1 hanya placeholder, harusnya itu adalah id galang dana{% endcomment %}
-        <a href="{% url 'resipien:daftar' %}"><button type="button" class="btn btn-primary">Buat Lelang</button></a>
+        <h1 class="text-center" style="margin-top: 50px;">Hello {{ request.user.first_name }}</h1>
+        <div class="container">
+            <div class="d-flex justify-content-center row row-cols-2" id="grid_card">
+                <button style="width: 170px; margin: 25px 25px;" type="button" class="btn btn-primary" id="myLelang">Show My Lelang</button>
+                <button style="width: 170px; margin: 25px 25px;" type="button" class="btn btn-primary" id="myGalang">Show My Donation</button>
+            </div>
+        </div>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#lelang-">
+        Launch demo modal
+        </button>
+        <div class="card shadow-lg p-3 mb-5 rounded" style="width: 90%; margin-top: 20px; background-color: #51937D; border-radius: 20px;">
+            <div class="card-body">
+                <div class="container">
+                    <div class="d-flex justify-content-around row row-cols-3" id="grid_card">
+                        <div class="max-w-sm " style="width: 300px; margin-bottom: 30px; background-color: #FFFFFF; border-radius: 20px;" id="lelang-${data.pk}">
+                            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                            <div class="fw-bold fs-4" style="margin-bottom: 20px;">${data.fields.nama_barang}</div>
+                            <div class="fw-bold">Deskripsi</div>
+                            <div class="fw-normal">${data.fields.deskripsi}</div>
+                            <div class="fw-bold">Kategori Barang</div>
+                            <div class="fw-normal">${data.fields.kategori_barang}</div>
+                            <div class="fw-bold">Bid Tertinggi</div>
+                            <div class="fw-normal">${data.fields.bid_tertinggi}</div>
+                            <div class="fw-bold">Status</div>
+                            <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                            <button type="button" class="btn btn-primary" onclick="detailGalang()">Detail</button>
+                            </div>
+                        </div>
+                        <div class="max-w-sm" style="width: 300px; margin-bottom: 30px; background-color: #FFFFFF; border-radius: 20px;" id="lelang-${data.pk}">
+                            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                            <div class="fw-bold fs-4" style="margin-bottom: 20px;">${data.fields.nama_barang}</div>
+                            <div class="fw-bold">Deskripsi</div>
+                            <div class="fw-normal">${data.fields.deskripsi}</div>
+                            <div class="fw-bold">Kategori Barang</div>
+                            <div class="fw-normal">${data.fields.kategori_barang}</div>
+                            <div class="fw-bold">Bid Tertinggi</div>
+                            <div class="fw-normal">${data.fields.bid_tertinggi}</div>
+                            <div class="fw-bold">Status</div>
+                            <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                            <button type="button" class="btn btn-primary" onclick="detailGalang()">Detail</button>
+                            </div>
+                        </div>
+                        <div class="max-w-sm" style="width: 300px; margin-bottom: 30px; background-color: #FFFFFF; border-radius: 20px;" id="lelang-${data.pk}">
+                            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                            <div class="fw-bold fs-4" style="margin-bottom: 20px;">${data.fields.nama_barang}</div>
+                            <div class="fw-bold">Deskripsi</div>
+                            <div class="fw-normal">${data.fields.deskripsi}</div>
+                            <div class="fw-bold">Kategori Barang</div>
+                            <div class="fw-normal">${data.fields.kategori_barang}</div>
+                            <div class="fw-bold">Bid Tertinggi</div>
+                            <div class="fw-normal">${data.fields.bid_tertinggi}</div>
+                            <div class="fw-bold">Status</div>
+                            <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                            <button type="button" class="btn btn-primary" onclick="detailGalang()">Detail</button>
+                            </div>
+                        </div>
+                        <div class="max-w-sm" style="width: 300px; margin-bottom: 30px; background-color: #FFFFFF; border-radius: 20px;" id="lelang-${data.pk}">
+                            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                            <div class="fw-bold fs-4" style="margin-bottom: 20px;">${data.fields.nama_barang}</div>
+                            <div class="fw-bold">Deskripsi</div>
+                            <div class="fw-normal">${data.fields.deskripsi}</div>
+                            <div class="fw-bold">Kategori Barang</div>
+                            <div class="fw-normal">${data.fields.kategori_barang}</div>
+                            <div class="fw-bold">Bid Tertinggi</div>
+                            <div class="fw-normal">${data.fields.bid_tertinggi}</div>
+                            <div class="fw-bold">Status</div>
+                            <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                            <button type="button" class="btn btn-primary" onclick="detailGalang()">Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% else %}
+        <div class="card" style="background-color: #51937D; border-radius: 20px; margin: 20px 20px 20px 20px;">
+            <div class="card-body">
+                <div class="container">
+                    <h1 class="display-4">What is Bidcare?</h1>
+                    <p class="lead">Bidcare merupakan sebuah platform lelang yang dimana hasil dari lelang tersebut ditunjukkan untuk donasi kepada yang membutuhkan </p>
+                </div>
+            </div>
+        </div>
+        <div class="card" style="background-color: #51937D; border-radius: 20px; margin: 20px 20px 20px 20px;">
+            <div class="card-body">
+                <div class="container">
+                    <h1 class="display-4">Bidcare Teams</h1>
+                    <p class="lead"> hasil dari lelang tersebut ditunjukkan untuk donasi kepada yang membutuhkan </p>
+                </div>
+            </div>
+        </div>
         <h1 class="text-center">Hello world</h1>
         <a href="{% url 'general_user:register' %}"><button type="button" class="btn btn-primary">Sign-Up Now</button></a>
         {% endif %}
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="lelang-" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" id="isi">
+        <div class="modal-header">
+            <h5 class="modal-title fw-bold fs-2" id="staticBackdropLabel">data.fields.nama_barang</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img style="width:200px; height: auto;"alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png">
+            <div class="fw-bold">Deskripsi</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.deskripsi}</div>
+            <div class="fw-bold">Kategori Barang</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.kategori_barang}</div>
+            <div class="fw-bold">Starting Bid</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.starting_bid}</div>
+            <div class="fw-bold">Highest Bid</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.bid_tertinggi}</div>
+            <div class="fw-bold">Tanggal Mulai</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tanggal_mulai}</div>
+            <div class="fw-bold">Tanggal Berakhir</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tanggal_berakhir}</div>
+            <div class="fw-bold">Status</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.status_keaktifan}</div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock content %}

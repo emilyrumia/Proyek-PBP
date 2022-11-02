@@ -4,7 +4,6 @@
         "pk":1,
         "fields":{
             "nama":"Budi",
-            "title":"BidCare Sukses",
             "target":"",
             "pesan": "Semangat menjalaninya"
         }
@@ -14,7 +13,6 @@
         "pk":2,
         "fields":{
             "nama":"Anonymous",
-            "title":"Mantap",
             "target":"",
             "pesan": "Mantap"
         }
@@ -24,7 +22,6 @@
         "pk":3,
         "fields":{
             "nama":"Anonymous",
-            "title":"Asik Tercapai",
             "target":"Rp 100.000",
             "pesan": "Alhamdulillah donasinya tercapai"
         }
