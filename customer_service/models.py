@@ -17,7 +17,6 @@ class Pertanyaan(models.Model):
         ("GALANG", "Galang Dana")
     )
 
-    # user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE)
     kategori = models.CharField(max_length=6, choices=KATEGORI, default=UMUM);
     teks_pertanyaan = models.TextField(max_length=1000)
     is_answered = models.BooleanField(default=False)
@@ -26,9 +25,6 @@ class Pertanyaan(models.Model):
 
     def __str__(self):
         return self.teks_pertanyaan
-
-    # class Meta:
-    #     unique_together = [['kategori', 'teks_pertanyaan']]
 
     def natural_key(self):
         return (self.kategori, self.teks_pertanyaan)
