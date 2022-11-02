@@ -9,7 +9,7 @@ from django.core import serializers
 from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
 from resipien.models import GalangDana
-# from lelang.models import BarangLelang
+from lelang.models import BarangLelang
 # Create your views here.
 
 def homepage(request):
@@ -106,12 +106,10 @@ def get_lelang(request, id):
 
 # @login_required(login_url='/todolist/login')
 def show_json_lelang(request):
-    data = BarangLelang.objects.filter(pelelang=request.user)
+    data = BarangLelang.objects.filter(pelelang=GeneralUser.objects.get(user=request.user))
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 # @login_required(login_url='/todolist/login')
 def show_json_galang(request):
-    data = GalangDana.objects.all()
-    print(data)
-    # data = GalangDana.objects.filter(user=GeneralUser.objects.get(user=request.user))
+    data = GalangDana.objects.filter(user=GeneralUser.objects.get(user=request.user))
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
