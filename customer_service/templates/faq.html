@@ -10,12 +10,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- <script type="text/javascript" src="{% static 'faq.js' %}"></script> -->
+<script type="text/javascript"> window.CSRF_TOKEN = "{{ csrf_token }}"; </script>
+<script type="text/javascript" src="{% static 'faq.js' %}"></script>
 
 {% endblock meta %}
 
 {% block content %}
-<!-- {% load crispy_forms_tags %} -->
 
 <div class="container-fluid" style="position:relative">
   <div class="d-flex flex-column align-items-center vh-100">
@@ -27,7 +27,7 @@
         </div>
       </div></center>
 
-      <div class="dropdown align-items-center">
+      <!-- <div class="dropdown align-items-center">
         <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           Dropdown button
         </button>
@@ -37,9 +37,11 @@
           <li><button type="button" class="dropdown-item">Lelang</button></li>
           <li><button type="button" class="dropdown-item">Galang</button></li>
         </ul>
-      </div>
+      </div> -->
 
     </div>
+
+      <!-- Displaying FAQ -->
       <div class="container" id="display-faq"></div>   
     
 
@@ -47,7 +49,7 @@
 
         {% if request.user.is_authenticated and request.user.is_staff %}
           <div class="move-page" style="padding:50px;">
-          <center><button type="button" class="btn btn-primary btn-lg">
+          <center><button type="button" class="btn btn-success btn-lg">
             <a href="{% url 'customer_service:pertanyaan_masuk' %}" style="text-decoration: none; color: white;">
             Klik untuk menjawab pertanyaan-pertanyaan yang masuk!
           </a></button></center></div>
@@ -55,7 +57,7 @@
       
         {% elif request.user.is_authenticated and request.user.is_staff == False %}
           <div class="move-page" style="padding:25px;">
-            <center><button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="align-content:center; margin:50px">
+            <center><button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalPertanyaan" style="align-content:center; margin:50px">
             Tanya di sini!</button></center></div>
 
           <!-- MODAL -->
@@ -67,19 +69,14 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <!-- <form method="POST" action="{% url 'customer_service:add_pertanyaan' %}" id="form-modal">
-                  {% csrf_token %}
-                  {{ form_pertanyaan|crispy }}
-                </form> -->
 
                 <form id="form-modal">
                   {% csrf_token %}
                   {{ form_pertanyaan|crispy }}
                 
-                <div class="modal-footer">
-                  <div class="container text-center mt-3">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="#modalPertanyaan" onclick="submitPertanyaan()" id="submit-ques">Submit Question</button>
-                  </div>
+                <div class="container text-center mt-3">
+                  <button type="button" class="btn btn-success" data-bs-dismiss="#modalPertanyaan" onclick="submitPertanyaan()" id="submit-ques">Submit Question</button>
+                  
                 </div>
                 </form>
                 
@@ -90,7 +87,7 @@
 
         {% else %}
         <div class="move-page" style="padding:50px;">
-          <center><button type="button" class="btn btn-primary btn-lg">
+          <center><button type="button" class="btn btn-success btn-lg">
             <a href="{% url 'general_user:login' %}" style="text-decoration: none; color: white;">
             Login untuk mengirim pertanyaan!
           </a></button></center></div>
@@ -99,227 +96,5 @@
       </div>
     </div>
 </div>
-
-<!-- SCRIPT BUAT ACCORDION -->
-
-
-<script>
-  // Script untuk FORM PERTANYAAN 
-  // $(document).ready(function(){
-  //     $("#submitques").click(function(){
-  function submitPertanyaan() {
-        // e.preventDefault();
-        
-        $.ajax({
-            url: "{% url 'customer_service:add_pertanyaan' %}",
-            type: 'POST',
-            data: { csrfmiddlewaretoken: '{{ csrf_token }}',
-                'kategori': $('#kategori').val(),
-                'teks_pertanyaan': $('#teks_pertanyaan').val() }, 
-            // success: function(res) {
-            //   $('#form-modal')[0].reset();
-            //   $("#modalPertanyaan").modal('hide');
-            //   displayPertanyaan() }
-            // success: alert("Pertanyaan berhasil dikirim!")
-            success: function(res){
-              // document.getElementById("display-pertanyaan").innerHTML = ""
-              // onclick = 'submitAnswer("${res.pk}")'
-              var html = `<div class="col">
-                          <div class="card">
-                            <div class="card-header h5" style="vertical-align: middle;">
-                              <strong> ${res.fields.teks_pertanyaan} </strong></div>
-                            <div class="card-body">
-                            <form id="${res.pk}">
-                              {% csrf_token %}
-                              {{ form_jawaban|crispy }}
-                            <div class="container text-center mt-3">
-                                <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${res.pk}")' id="submit-ans">Submit Answer</button>
-                            </div>
-                            </form>
-                          </div>
-                        </div>
-                        <br>
-                      </div>`
-
-              $('#display-pertanyaan').append(html)
-              // alert("Pertanyaan berhasil dikirim!")
-              // displayPertanyaan()
-            // //  document.getElementById("display-pertanyaan").innerHTML = html
-                
-            }
-        });
-        $('#form-modal')[0].reset();
-        $("#modalPertanyaan").modal('hide');
-        
-  //     });
-  // });
-      }
-  
-
-  // Script untuk FORM JAWABAN
-  // $(document).ready(function(){
-  function submitAnswer(id) {
-      // $("#submit-ans").click(function(){
-        // e.preventDefault();
-        alert("ketrigger cuyy")
-        $.ajax({
-          url: "pertanyaan-masuk/add-jawaban/"+id,
-          type: 'POST',
-          data: { csrfmiddlewaretoken: '{{ csrf_token }}',
-                'jawaban': $('#jawaban').val() }, 
-          success: function(res) {
-            
-            var html = `<div class="col">
-                          <div class="card">
-                            <div class="card-header h5" style="vertical-align: middle;">
-                              <strong>${res.fields.pertanyaan.fields.teks_pertanyaan}</strong></div>
-                              <div class="card-body">
-                                <p class="card-text">${res.fields.jawaban}</p>
-                              </div>
-                            </div>
-                          <br>
-                        </div>`
-                              
-            $('#display-faq').append(html)
-
-            displayPertanyaan()
-    
-          }
-        }); 
-        
-        $('#'+id)[0].reset();
-      // });
-  }
-
-  // Script untuk MENAMPILKAN FAQ
-  function displayFAQ() {
-    $.ajax({
-        url: "{% url 'customer_service:jsonFAQ' %}",
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-          var htmlString = ""
-          // $.each(res, function(key, value) {
-          //   htmlString += "<div class=\"col\">" + 
-          //                   "<div class=\"card\">" +
-          //                     "<div class=\"card-header h5\" style=\"vertical-align: middle\">" +
-          //                       "<strong>" + res[key].fields.pertanyaan[1] + "</strong></div>" +
-          //                       "<div class=\"card-body\">" +
-          //                         "<p class=\"card-text\">" + res[key].fields.jawaban + "</p>" +
-          //                      "</div>" +
-          //                     "</div>" +
-          //                   "<br>" +
-          //                 "</div>"
-          // })
-          res.forEach((faq) => {
-            // htmlString += `<div class="col">
-            //                 <div class="card">
-            //                   <div class="card-header h5" style="vertical-align: middle;">
-            //                     <strong> ${faq.fields.pertanyaan[1]} </strong></div>
-            //                     <div class="card-body">
-            //                       <p class="card-text">${faq.fields.jawaban}</p>
-            //                     </div>
-            //                   </div>
-            //                 <br>
-            //               </div>`
-
-            if (faq.fields.pertanyaan[0] == "UMUM") {
-              htmlString += `<button class="accordion umum rounded">
-                              <i class="fa-solid fa-circle-question" style="font-size:1.25em; padding-right:8px;"></i>
-                              <strong style="font-size:18px;">${faq.fields.pertanyaan[1]}</strong>
-                              </button>
-                                <div class="panel rounded">
-                                    <h6 style="margin-block: 18px;">${faq.fields.jawaban}</h6>
-                                </div>
-                            <span class="break"></span>`
-            } else if (faq.fields.pertanyaan[0] == "LELANG") {
-              htmlString += `<button class="accordion lelang rounded">
-                              <i class="fa-solid fa-gavel" style="font-size:1.5em; padding-right:8px;"></i>
-                              <strong style="font-size:18px;">${faq.fields.pertanyaan[1]}</strong></button>
-                                <div class="panel rounded">
-                                    <h6 style="margin-block: 18px;">${faq.fields.jawaban}</h6>
-                                </div>
-                            <span class="break"></span>`
-            } else {
-              htmlString += `<button class="accordion galang rounded">
-                              <i class="fa-solid fa-hand-holding-dollar" style="font-size:1.5em; padding-right:8px;"></i>
-                              <strong style="font-size:18px;">${faq.fields.pertanyaan[1]}</strong></button>
-                                <div class="panel rounded">
-                                    <h6 style="margin-block: 18px;">${faq.fields.jawaban}</h6>
-                                </div>
-                            <span class="break"></span>`
-            }
-
-            
-          }); 
-
-          $('#display-faq').html(htmlString)
-
-          // SCRIPT BUAT ACCORDION
-          var acc = document.getElementsByClassName("accordion");
-            var i;
-            
-            for (i = 0; i < acc.length; i++) {
-              acc[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var panel = this.nextElementSibling;
-                if (panel.style.maxHeight) {
-                  panel.style.maxHeight = null;
-                } else {
-                  panel.style.maxHeight = panel.scrollHeight + "px";
-                } 
-              });
-            }
-
-        }
-    });
-  }
-
-  // Script untuk MENAMPILKAN PERTANYAAN  
-  function displayPertanyaan() {
-    $.ajax({
-        url: "{% url 'customer_service:jsonPertanyaan' %}",
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-          var htmlString = ""
-          res.forEach((pertanyaan) => {
-            htmlString += `<div class="col">
-                          <div class="card">
-                            <div class="card-header h5" style="vertical-align: middle;">
-                              <strong> ${pertanyaan.fields.teks_pertanyaan} </strong></div>
-                            <div class="card-body">
-                            
-                            <form id="${pertanyaan.pk}">
-                              {% csrf_token %}
-                              {{ form_jawaban|crispy }}
-                              
-
-                            <div class="container text-center mt-3">
-                                <button type="button" class="btn btn-primary" onclick = 'submitAnswer("${pertanyaan.pk}")' id="submit-ans">Submit Answer</button>
-                            </div>
-                            </form>
-                          </div>
-                        </div>
-                        <br>
-                      </div>`
-            
-          }); 
-
-          $('#display-pertanyaan').html(htmlString)
-          
-        }
-    });
-
-  }
-
-  // Displaying for the first time
-  $(document).ready(displayFAQ())
-  $(document).ready(displayPertanyaan())
-
-</script>
-
-
-
 
 {% endblock content %}
