@@ -11,7 +11,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            loadData();
             $('#myGalang').click(function(){
                 $.get(`/general_user/galang/json`, function(data) {
                     for (var i = 0; i < data.length; i++) {
@@ -27,44 +26,42 @@
                 });
             })
         });
-
         function detailGalang(id) {
-            $.ajax
-        }
-        function deleteCard(id) {
             $.ajax({
-                url: `/todolist/delete/${id}`,
-                type: 'DELETE',
-                success: function (result) {
-                    $(`#task-${id}`).remove()
+                url: `/general_user/galang/${id}`,
+                type: 'GET',
+                success: function(data){
+                    $(`#isi`).html(
+                `<div class="modal-header">
+          <h5 class="modal-title fw-bold fs-2" id="staticBackdropLabel">Judul</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <img style="width:200px; height: auto;"alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png">
+            <div class="fw-bold">Deskripsi</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.deskripsi}</div>
+            <div class="fw-bold">Tujuan</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tujuan}</div>
+            <div class="fw-bold">Tanggal Pembuatan</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tujuan}</div>
+            <div class="fw-bold">Tanggal Berakhir</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tujuan}</div>
+            <div class="fw-bold">Terkumpul</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tujuan}</div>
+            <div class="fw-bold">Target</div>
+            <div class="font-semibold text-sm mb-2">{data.fields.tujuan}</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>`);
+                    $("#galang-").modal('show');
                 }
-            });
+            })
         }
-
-        function updateCard(id) {
-            $.ajax({
-                url: `/todolist/update/${id}`,
-                type: 'PATCH',
-                success: function (data) {
-                    $(`#task-${id}`).empty()
-                    $(`#task-${id}`).append(
-                      `<div class="rounded overflow-hidden shadow-lg">
-                        <div class="font-bold text-xl mb-2">${data.fields.title}</div>
-                        <div class="font-semibold text-sm mb-2">${data.fields.date}</div>
-                        <p class="text-gray-700 text-base">${data.fields.description}</p>
-                        <div class="font-semibold text-sm mb-2">{% if data.fields.is_finished %} Selesai {% else %} Belum Selesai {% endif %}</div>
-                        <button onclick="updateCard(${data.pk})">Update Task</a></button>
-                        <button onclick="deleteCard(${data.pk})">Delete Task</a></button>
-                      </div>`
-                    )
-                }
-            });
-        }
-
         const card_lelang = (data) =>
         `<div class="max-w-sm" id="lelang-${data.pk}">
             <div class="rounded overflow-hidden shadow-lg">
-              <div class="font-bold text-xl mb-2">${data.fields.title}</div>
+              <div class="font-bold text-xl mb-2">Judul</div>
               <div class="font-semibold text-sm mb-2">${data.fields.date}</div>
               <p class="text-gray-700 text-base">${data.fields.description}</p>
               <div class="font-semibold text-sm mb-2">{% if data.fields.is_finished %} Selesai {% else %} Belum Selesai {% endif %}</div>
@@ -74,15 +71,18 @@
           </div>`
         
         const card_galang = (data) =>
-        `<div class="max-w-sm" id="galang-${data.pk}">
-            <div class="rounded overflow-hidden shadow-lg">
-              <div class="font-bold text-xl mb-2">${data.fields.judul}</div>
-              <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-              <p class="text-gray-700 text-base">${data.fields.description}</p>
-              <div class="font-semibold text-sm mb-2">{% if data.fields.is_finished %} Selesai {% else %} Belum Selesai {% endif %}</div>
-              <button type="button" class="p-1 bg-black rounded-lg w-full text-white font-bold" data-bs-toggle="modal" data-bs-target="#myModal">Detail</button>
+        `<div class="max-w-sm" style="width: 300px" id="galang-${data.pk}">
+            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                <div class="fw-bold fs-3" style="margin-bottom: 20px;">${data.fields.judul}</div>
+                <div class="fw-bold">Tujuan</div>
+                <div class="fw-normal">${data.fields.tujuan}</div>
+                <div class="fw-bold">Deskripsi</div>
+                <p class="text-gray-700 text-base">${data.fields.deskripsi}</p>
+                <div class="fw-bold">Status</div>
+                <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                <button type="button" class="btn btn-primary" onclick="detailGalang()">Detail</button>
             </div>
-          </div>`
+        </div>`
 
         function loadData() {
             $.get(`/todolist/json`, function (data) {
@@ -99,19 +99,24 @@
         <h1 class="text-center" style="margin-top: 200px;">Hello {{ request.user.first_name }}</h1>
         <button type="button" class="btn btn-primary" id="myLelang">Show My Lelang</button>
         <button type="button" class="btn btn-primary" id="myGalang">Show My Donation</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#galang-">
+        <button type="button" class="btn btn-primary" onclick="detailGalang2()">
             Launch static backdrop modal
         </button>
         <div class="card" style="width: 90%; margin-top: 20px;">
             <div class="card-body">
-                <div class="grid gap-4 grid-cols-1 sm:grid-flow-cols-1 md:grid-cols-3 lg:grid-cols-4 m-4" id="todo">
-                    <div class="max-w-sm" style="width: 300px" id="galang-${data.pk}">
-                        <div class="rounded overflow-hidden shadow-lg">
-                          <div style="font-weight: bold; font-size: 20px">Judul</div>
-                          <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-                          <p class="text-gray-700 text-base">${data.fields.description}</p>
-                          <div class="font-semibold text-sm mb-2">{% if data.fields.is_finished %} Selesai {% else %} Belum Selesai {% endif %}</div>
-                          <button type="button" class="p-1 bg-black rounded-lg w-full text-white font-bold" data-bs-toggle="modal" data-bs-target="#myModal">Detail</button>
+                <div class="container">
+                    <div class="row row-cols-4" id="grid_card">
+                        <div class="max-w-sm" style="width: 300px" id="galang-${data.pk}">
+                            <div class="rounded overflow-hidden shadow-lg d-flex flex-column justify-content-center align-items-center">
+                            <div class="fw-bold fs-4" style="margin-bottom: 20px;">${data.fields.judul}</div>
+                            <div class="fw-bold">Tujuan</div>
+                            <div class="fw-normal">${data.fields.tujuan}</div>
+                            <div class="fw-bold">Deskripsi</div>
+                            <p class="text-gray-700 text-base">${data.fields.deskripsi}</p>
+                            <div class="fw-bold">Status</div>
+                            <div class="font-semibold text-sm mb-2">{% if data.fields.status_keaktifan %} Aktif {% else %} Tidak Aktif {% endif %}</div>
+                            <button type="button" class="btn btn-primary" onclick="detailGalang()">Detail</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,30 +132,9 @@
 <!-- Modal -->
 <div class="modal fade" id="galang-" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold fs-2" id="staticBackdropLabel">Judul</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <img style="width:200px; height: auto;"alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png">
-            <div class="fw-bold">Deskripsi</div>
-            <div class="font-semibold text-sm mb-2">${data.fields.deskripsi}</div>
-            <div class="fw-bold">Tujuan</div>
-            <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-            <div class="fw-bold">Tanggal Pembuatan</div>
-            <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-            <div class="fw-bold">Tanggal Berakhir</div>
-            <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-            <div class="fw-bold">Terkumpul</div>
-            <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-            <div class="fw-bold">Target</div>
-            <div class="font-semibold text-sm mb-2">${data.fields.tujuan}</div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        </div>
+      <div class="modal-content" id="isi">
+        test
       </div>
     </div>
-  </div>
+</div>
 {% endblock content %}
