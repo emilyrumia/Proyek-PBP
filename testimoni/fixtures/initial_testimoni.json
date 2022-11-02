@@ -1,0 +1,29 @@
+[
+    {
+        "model":"testimoni.testimonilist",
+        "pk":1,
+        "fields":{
+            "nama":"Budi",
+            "target":"",
+            "pesan": "Semangat menjalaninya"
+        }
+},
+{
+        "model":"testimoni.testimonilist",
+        "pk":2,
+        "fields":{
+            "nama":"Anonymous",
+            "target":"",
+            "pesan": "Mantap"
+        }
+    },
+    {
+        "model":"testimoni.testimonilist",
+        "pk":3,
+        "fields":{
+            "nama":"Anonymous",
+            "target":"Rp 100.000",
+            "pesan": "Alhamdulillah donasinya tercapai"
+        }
+    }
+]
