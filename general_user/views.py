@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.core import serializers
 from general_user.forms import RegisterForm, RekeningBankForm
 from general_user.models import GeneralUser
-# from resipien.models import GalangDana
+from resipien.models import GalangDana
 # from lelang.models import BarangLelang
 # Create your views here.
 
@@ -62,54 +62,56 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('general_user:homepage'))
 
-# def get_galang(request, id):
-#     if request.method == "GET":
-#         galang = get_object_or_404(GalangDana, id = id)
+def get_galang(request, id):
+    if request.method == "GET":
+        galang = get_object_or_404(GalangDana, id = id)
     
-#     result = {
-#         'fields':{
-#             'judul': galang.judul,
-#             'gambar': galang.gambar,
-#             'deskripsi': galang.deskripsi,
-#             'tujuan': galang.tujuan,
-#             'tanggal_pembuatan': galang.tanggal_pembuatan,
-#             'tanggal_berakhir': galang.tanggal_berakhir,
-#             'terkumpul': galang.terkumpul,
-#             'target': galang.target,
-#             'status_keaktifan': galang.status_keaktifan,
-#             },
-#             'pk': galang.pk
-#         }
+    result = {
+        'fields':{
+            'judul': galang.judul,
+            'gambar': galang.gambar,
+            'deskripsi': galang.deskripsi,
+            'tujuan': galang.tujuan,
+            'tanggal_pembuatan': galang.tanggal_pembuatan,
+            'tanggal_berakhir': galang.tanggal_berakhir,
+            'terkumpul': galang.terkumpul,
+            'target': galang.target,
+            'status_keaktifan': galang.status_keaktifan,
+            },
+            'pk': galang.pk
+        }
         
-#     return JsonResponse(result)
+    return JsonResponse(result)
 
-# def get_lelang(request, id):
-#     if request.method == "GET":
-#         lelang = get_object_or_404(BarangLelang, id = id)
+def get_lelang(request, id):
+    if request.method == "GET":
+        lelang = get_object_or_404(BarangLelang, id = id)
     
-#     result = {
-#         'fields':{
-#             'nama_barang': lelang.nama_barang,
-#             'gambar': lelang.gambar,
-#             'deskripsi': lelang.deskripsi,
-#             'starting_bid': lelang.starting_bid,
-#             'tanggal_mulai': lelang.tanggal_mulai,
-#             'tanggal_berakhir': lelang.tanggal_berakhir,
-#             'bid_tertinggi': lelang.bid_tertinggi,
-#             'kategori_barang': lelang.kategori_barang,
-#             'status_keaktifan': lelang.status_keaktifan,
-#             },
-#             'pk': lelang.pk
-#         }
+    result = {
+        'fields':{
+            'nama_barang': lelang.nama_barang,
+            'gambar': lelang.gambar,
+            'deskripsi': lelang.deskripsi,
+            'starting_bid': lelang.starting_bid,
+            'tanggal_mulai': lelang.tanggal_mulai,
+            'tanggal_berakhir': lelang.tanggal_berakhir,
+            'bid_tertinggi': lelang.bid_tertinggi,
+            'kategori_barang': lelang.kategori_barang,
+            'status_keaktifan': lelang.status_keaktifan,
+            },
+            'pk': lelang.pk
+        }
         
-#     return JsonResponse(result)
+    return JsonResponse(result)
 
 # @login_required(login_url='/todolist/login')
-# def show_json_lelang(request):
-#     data = BarangLelang.objects.filter(pelelang=request.user)
-#     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+def show_json_lelang(request):
+    data = BarangLelang.objects.filter(pelelang=request.user)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 # @login_required(login_url='/todolist/login')
-# def show_json_galang(request):
-#     data = GalangDana.objects.filter(user=request.user)
-#     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+def show_json_galang(request):
+    data = GalangDana.objects.all()
+    print(data)
+    # data = GalangDana.objects.filter(user=GeneralUser.objects.get(user=request.user))
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
