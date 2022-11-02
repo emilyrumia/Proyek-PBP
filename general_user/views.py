@@ -83,26 +83,26 @@ def logout_user(request):
         
 #     return JsonResponse(result)
 
-def get_lelang(request, id):
-    if request.method == "GET":
-        lelang = get_object_or_404(BarangLelang, id = id)
+# def get_lelang(request, id):
+#     if request.method == "GET":
+#         lelang = get_object_or_404(BarangLelang, id = id)
     
-    result = {
-        'fields':{
-            'nama_barang': lelang.nama_barang,
-            'gambar': lelang.gambar,
-            'deskripsi': lelang.deskripsi,
-            'starting_bid': lelang.starting_bid,
-            'tanggal_mulai': lelang.tanggal_mulai,
-            'tanggal_berakhir': lelang.tanggal_berakhir,
-            'bid_tertinggi': lelang.bid_tertinggi,
-            'kategori_barang': lelang.kategori_barang,
-            'status_keaktifan': lelang.status_keaktifan,
-            },
-            'pk': lelang.pk
-        }
+#     result = {
+#         'fields':{
+#             'nama_barang': lelang.nama_barang,
+#             'gambar': lelang.gambar,
+#             'deskripsi': lelang.deskripsi,
+#             'starting_bid': lelang.starting_bid,
+#             'tanggal_mulai': lelang.tanggal_mulai,
+#             'tanggal_berakhir': lelang.tanggal_berakhir,
+#             'bid_tertinggi': lelang.bid_tertinggi,
+#             'kategori_barang': lelang.kategori_barang,
+#             'status_keaktifan': lelang.status_keaktifan,
+#             },
+#             'pk': lelang.pk
+#         }
         
-    return JsonResponse(result)
+#     return JsonResponse(result)
 
 # @login_required(login_url='/todolist/login')
 # def show_json_lelang(request):

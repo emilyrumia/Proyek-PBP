@@ -12,14 +12,14 @@
     <script>
         $(document).ready(function () {
             $('#myGalang').click(function(){
-                $.get(`/general_user/galang/json`, function(data) {
+                $.get(`/galang/json`, function(data) {
                     for (var i = 0; i < data.length; i++) {
                         $(`#grid_card`).append(card_galang(data[i]));
                     }
                 });
             })
             $('#myLelang').click(function(){
-                $.get(`/general_user/lelang/json`, function(data) {
+                $.get(`/lelang/json`, function(data) {
                     for (var i = 0; i < data.length; i++) {
                         $(`#grid_card`).append(card_lelang(data[i]));
                     }
@@ -28,7 +28,7 @@
         });
         function detailGalang(id) {
             $.ajax({
-                url: `/general_user/galang/${id}`,
+                url: `/galang/${id}`,
                 type: 'GET',
                 success: function(data){
                     $(`#isi`).html(
@@ -60,7 +60,7 @@
         }
         function detailLelang(id) {
             $.ajax({
-                url: `/general_user/lelang/${id}`,
+                url: `/lelang/${id}`,
                 type: 'GET',
                 success: function(data){
                     $(`#isi`).html(
@@ -121,14 +121,6 @@
                 <button type="button" class="btn btn-primary" onclick="detailGalang(${data.pk})">Detail</button>
             </div>
         </div>`
-
-        function loadData() {
-            $.get(`/todolist/json`, function (data) {
-                for (var i = 0; i < data.length; i++) {
-                    $(`#grid_card`).append(card(data[i]));
-                }
-            });
-        }
     </script>
 </head>
 <div class="container-fluid">
