@@ -1,7 +1,4 @@
-# from lib2to3.pgen2.token import GREATER
-from inspect import stack
-import json
-import re
+
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
@@ -14,6 +11,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.views.decorators.csrf import csrf_protect
 from django.utils.timesince import timesince
+from lelang.models import BarangLelang
 
 # Create your views here.
 
@@ -59,7 +57,9 @@ def show_daftar_galang(request):
 def show_detail_galang(request, id):     
     objek_galang = GalangDana.objects.get(id=id)
     data_komentar = KomentarGalang.objects.filter(objek_galang=id)
+    objek_lelang = BarangLelang.objects.filter(galang_dana_tujuan = objek_galang).order_by('-status_keaktifan', 'tanggal_berakhir')
     formKomentar = KomentarGalangForm(request.POST or None)
+    rasio_donasi = objek_galang.terkumpul/objek_galang.target * 100
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         is_ajax = True
     else:
@@ -79,27 +79,10 @@ def show_detail_galang(request, id):
         "galang": objek_galang,
         "data_komentar": data_komentar,
         "formKomentar": formKomentar,
+        "data_lelang" : objek_lelang,
+        "rasio_donasi" : rasio_donasi
     }
-    if request.user.is_authenticated:
-        data_galang_user = GalangDana.objects.filter(user=GeneralUser.objects.get(user=request.user))
-        context = {
-        "galang": objek_galang,
-        "data_komentar": data_komentar,
-        "formKomentar": formKomentar,
-        "data_galang_user":data_galang_user
-        }
-        return render(request, "resipien/detail-galang.html",  context)
     return render(request, "resipien/detail-galang.html",  context)
-
-def show_json(request):
-    data_galang = GalangDana.objects.all()
-    return HttpResponse(serializers.serialize('json',data_galang), content_type="application/json")
-
-
-@login_required(login_url='/general_user/login/')
-def delete_galang(request, id):
-    objek_galang = GalangDana.objects.get(id = id)
-    objek_galang.delete()
 
 
 

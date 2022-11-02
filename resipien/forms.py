@@ -25,7 +25,7 @@ class GalangForm(forms.Form):
     deskripsi = forms.CharField(label="Deskripsi", widget=forms.Textarea(attrs={'rows':15}))
     target = forms.IntegerField(label="Target")
     tanggal_berakhir = forms.DateField(widget = forms.SelectDateWidget(attrs={'style':'width:33%; display: inline-block;'}))
-    gambar = forms.ImageField(label="Gambar")
+    gambar = forms.ImageField(label="Gambar (Landscape)")
 
     target.widget.attrs.update({'placeholder':'Rp'})
     deskripsi.widget.attrs.update({'placeholder':'Ceritakan secara lengkap rencana penggunaan dana yang didapat dari galang dana ini'})
@@ -45,4 +45,4 @@ class KomentarGalangForm(forms.ModelForm):
         model = KomentarGalang
         fields = ['komentar']
 
-    komentar = forms.CharField(label="Komentar", widget=forms.Textarea(attrs={'rows':3, 'class':'form-control'}))
+    komentar = forms.CharField(label="", widget=forms.Textarea(attrs={'rows':3, 'class':'form-control', 'placeholder':'Tambahkan komentar...'}))

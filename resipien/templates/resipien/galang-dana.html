@@ -10,90 +10,9 @@
 <link rel="stylesheet" href="{% static 'css/resipien.css' %}">
 
 <title>Buat Galang Dana</title>
-<style>
-    #btn-detail {
-        color: white;
-    }
-
-    .cards {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: stretch;
-    }
-  
-    .card {
-        justify-content: center;
-        flex: 0 0 20% ;
-        margin: 2%;
-    }
-
-    a{
-        text-decoration:none;  
-    }
-
-    .zoom {
-        transition: transform .2s; /* Animation */
-    }
-
-    .zoom:hover {
-        transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-    }
-
-    #buat-galang:hover {
-        color: green;
-    }
-
-    #img-detail {
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
-        object-fit: fill;
-    }
-
-    #durasi {
-        font-size: 12px;
-    }
-
-    #terkumpul {
-        display: flex;
-        justify-content: right;
-        font-size: 12px;
-    }
-
-    #judul {
-        font: bold;
-    }
-
-
-    #btn-buatt {
-        position: fixed;
-    }
-
-
-
-
-</style>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
 
-    function formatRupiah(angka, prefix) {
-		var number_string = angka.replace(/[^,\d]/g, '').toString(),
-		split   		= number_string.split(','),
-		sisa     		= split[0].length % 3,
-		rupiah     		= split[0].substr(0, sisa),
-		ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
- 
-		if(ribuan){
-			separator = sisa ? '.' : '';
-			rupiah += separator + ribuan.join('.');
-		}
- 
-		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-		return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-	}
 
-</script>
 {% endblock meta %}
 
 
@@ -104,17 +23,19 @@
 {% if not request.user.is_authenticated %}
     <div id="container-galang">
         <div id="container-buat">
-            <img src="{% static 'images/help.png' %}"  style="max-height:40px">
-            <h2>&nbsp;&nbsp;&nbsp;#SayaButuhBantuan, </h2> 
-            <a href="{% url 'general_user:login' %}" class="btn" id="buat-galang" role="button" aria-pressed="true">Login untuk membuat Galang Dana</a>
+            <img src="{% static 'images/helpp.png' %}"  style="max-height:40px">
+            <h4 style="display: inline;">&nbsp;&nbsp;&nbsp;#SayaButuhBantuan,</h4> 
+            <a style="display: inline;" href="{% url 'general_user:login' %}" class="btn" id="buat-galang" role="button" aria-pressed="true">Login untuk membuat Galang Dana</a>
         </div>
     </div>
 {% else %}
-    <div id="container-galang">
+    <div id="container-galang" >
         <div id="container-buat">
-            <img src="{% static 'images/help.png' %}"  style="max-height:40px">
-            <h2>&nbsp;&nbsp;&nbsp;#SayaButuhBantuan, </h2> 
-            <a href="{% url 'resipien:buat' %}" class="btn" id="buat-galang" role="button" aria-pressed="true">Buat Galang Dana</a>
+            <span>
+                <img src="{% static 'images/helpp.png' %}"  style="max-height:40px;">
+                <h4 style="display: inline;">&nbsp;&nbsp;&nbsp;#SayaButuhBantuan, </h4> 
+                <a  style="display: inline;"href="{% url 'resipien:buat' %}" class="btn" id="buat-galang" role="button" aria-pressed="true">Buat Galang Dana</a></h4>
+            </span>
         </div>
     </div>
 {% endif %}
@@ -122,8 +43,7 @@
 <div class="centered">
     <section class="cards ">
         {% for galang in data_galang %}
-        <a class="card shadow bg-white rounded zoom" href="{% url 'resipien:detail' galang.id %}">
-            <!-- <div class="card shadow p-3 mb-5 bg-white rounded"> -->
+            <a class="card shadow bg-white rounded zoom" href="{% url 'resipien:detail' galang.id %}">
                 {% if galang.gambar %}
                     <img id="img-detail" src="{{ galang.gambar.url}}" style="max-height:300px">
                 {% else %}
@@ -141,25 +61,15 @@
                     {% endif %}
                     <h5 class="card-title" id="judul" style="color:black">{{ galang.judul}}</h5>
                     <p id="pembuat" style="color:orange"> {{ galang.user.user.username }} </p>
-                    <!-- <progress class="progress-bar bg-success rounded" value = "65" max = "100" style="width: 100%"></progress> -->
-                    <!-- <div class="progress">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" value="0" min="0" max="100"></div>
-                    </div> -->
                     <span id="terkumpul" style="color:green;">Terkumpul Rp. {{ galang.terkumpul }}</span>
-                    <progress class="progress-bar bg-success rounded" value = "{{ galang.terkumpul }}" max = "{{ galang.target }}" style="width: 100%"></progress>
+                    <progress class="progress-bar bg-success rounded" width="{{rasio_donasi}}" value = '{{rasio_donasi}}' max = '100' min='0' style="width: 100%"></progress>
                 </div>
                 <div class="card-footer text-muted">
                     <small id="durasi" style="color:gray"> <i class="fa fa-clock-o"></i> {{ galang.tanggal_berakhir|timeuntil }}</small>
-                    <!-- <progress class="progress-bar bg-success rounded" value = "65" max = "100" style="width: 100%"></progress>
-                    <small style="color:green; text-align: center;">Terkumpul Rp. {{ galang.terkumpul }}</small> -->
                 </div>
-                <!-- <a role="button" class="btn" id = "btn-detail" href="{% url 'resipien:detail' galang.id %}">Show Detail</a> -->
-            <!-- </div> -->
-        </a>
+            </a>
         {% endfor %}
     </section>
-
-    <button id="btn-buatt">Buat Galang Dana</button>
 </div>
 
 
