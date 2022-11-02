@@ -1,3 +1,4 @@
+from telnetlib import GA
 from django.contrib import admin
 
 from resipien.models import GalangDana, KomentarGalang
