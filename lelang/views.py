@@ -77,7 +77,7 @@ def rincian_lelang(request, lelang_id):
     semua_komentar = Komentar.objects.filter(barang_lelang=lelang_id)
     
     bid_diberikan = 0.7 * barang_lelang.bid_tertinggi
-    rasio_donasi = bid_diberikan / int(barang_lelang.galang_dana_tujuan.target.replace(".", "")[3:]) * 100
+    rasio_donasi = bid_diberikan / barang_lelang.galang_dana_tujuan.target
 
     context = {
         "form": form,

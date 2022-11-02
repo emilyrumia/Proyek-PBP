@@ -4,7 +4,8 @@ from django.db import models
 from general_user.models import GeneralUser
 from resipien.models import GalangDana
 
-# Create your models here.
+# Create your models here
+
 class BarangLelang(models.Model):
     ANTIK = "ANTIK"
     PERHIASAN = "PERHIASAN"
