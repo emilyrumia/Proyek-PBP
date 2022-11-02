@@ -49,18 +49,23 @@ def show_random_testimoni(request):
 # Method untuk menambahkan testimoni (dibutuhkan login akun)
 @login_required(login_url='/login')
 def add_testimoni(request) :
-
-    nama = request.POST.get("nama")
-    target = request.POST.get("target")
-    pesan = request.POST.get("pesan")
-
-    if len(nama) == 0 :
-        nama = "Anonymous"
+    if request.method == "POST" :
         
-    if len(target) == 0 :
-        target = "-"
+        # Mengambil data dari form (kecuali user)
+        user_logged_in = request.user
+        nama = request.POST.get("nama")
+        target = request.POST.get("target")
+        pesan = request.POST.get("pesan")
 
-    testimoni_baru = TestimoniList(nama=nama, target=target, pesan=pesan)
-    testimoni_baru.save()
+        # Isi form default jika nama dan target tidak diisi
+        if len(nama) == 0 :
+            nama = "Anonymous"
+            
+        if len(target) == 0 :
+            target = "-"
+
+        # Membuat objek testimoni baru dan save
+        testimoni_baru = TestimoniList(user=user_logged_in, nama=nama, target=target, pesan=pesan)
+        testimoni_baru.save()
 
     return HttpResponse(status=200)

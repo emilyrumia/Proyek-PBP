@@ -28,6 +28,7 @@ $(document).ready(function(){
             data : $('#testimoni_form').serialize(),
             
             success: function(response){
+                // Mengambil isi dari field forum post
                 nama = $('#id_nama').val(),
                 target = $('#id_target').val(),
                 pesan = $('#id_pesan').val() 
