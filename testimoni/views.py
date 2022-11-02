@@ -51,7 +51,6 @@ def show_random_testimoni(request):
 def add_testimoni(request) :
 
     nama = request.POST.get("nama")
-    title = request.POST.get("title")
     target = request.POST.get("target")
     pesan = request.POST.get("pesan")
 
@@ -61,7 +60,7 @@ def add_testimoni(request) :
     if len(target) == 0 :
         target = "-"
 
-    testimoni_baru = TestimoniList(nama=nama, title=title, target=target, pesan=pesan)
+    testimoni_baru = TestimoniList(nama=nama, target=target, pesan=pesan)
     testimoni_baru.save()
 
     return HttpResponse(status=200)
