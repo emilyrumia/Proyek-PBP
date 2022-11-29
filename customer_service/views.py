@@ -1,17 +1,12 @@
-from django.urls import reverse
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from customer_service.forms import JawabanForm, PertanyaanForm
-from django.shortcuts import redirect
 from django.core import serializers 
 from customer_service.models import FAQ, Pertanyaan
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.admin.views.decorators import staff_member_required
-
-
-import json
 
 # Create your views here.
 def index(request):
@@ -79,7 +74,7 @@ def deletePertanyaan(request,id):
 
     return HttpResponse()
 
-@staff_member_required
+@staff_member_required 
 def add_jawaban(request, id):
     print("hai km lg di add jawaban")
     # form_jawaban = JawabanForm(request.POST)
